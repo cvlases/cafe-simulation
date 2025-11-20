@@ -5,12 +5,26 @@ import Station from "./components/Station";
 import { customers } from "./data/customers";
 import type { DrinkInProgress, DrinkType, ExtraType, Order } from "./types";
 
+import HotChocolateMaker from "./components/HotChocolateMaker";
+
+
+
 function App() {
     // Create state for the drink being made
   const [currentDrink, setCurrentDrink] = useState<DrinkInProgress>({
     base: [],
     extras: []
   });
+  
+    // create a state for the two scenes (ordering and making)
+    type Scene = "order" | "making";
+    const [currentScene, setCurrentScene] = useState<Scene>("order");
+
+
+    // add a state to track if the player is actively making a hot chocolate
+    const [isMaking, setIsMaking] = useState(false);
+    const [makingDrinkType, setMakingDrinkType] = useState<DrinkType | null>(null);
+
 
    // ===============================================
    // customer progression
@@ -146,15 +160,64 @@ function App() {
   return (
     <div>
       <h1>Café Simulator</h1>
-      <Customer customer={customers[currentCustomerIndex]} />
-      <Station 
-        currentDrink={currentDrink}
-        onAddBase={handleAddBase}
-        onAddExtra={handleAddExtra}
-        onServe={handleServe}
-        onClear={handleClear}
-      />
-       {message && <p>{message}</p>}
+      
+      
+      {currentScene === "order" && (
+        <div className="order-scene">
+          <Customer customer={customers[currentCustomerIndex]} />
+          <button onClick={() => setCurrentScene("making")}>Start Making →</button>
+        </div>
+      )}
+      
+      {currentScene === "making" && (
+  <div className="making-scene">
+    <button onClick={() => setCurrentScene("order")}>← Back to Order</button>
+    
+    {!isMaking ? (
+      // Show drink selection
+      <div>
+        <h2>What are you making?</h2>
+        <button onClick={() => {
+          setIsMaking(true);
+          setMakingDrinkType("hot-chocolate");
+        }}>
+          Make Hot Chocolate
+        </button>
+        {/* You'll add Coffee and Mocha buttons later */}
+      </div>
+    ) : (
+      // Show the appropriate maker based on makingDrinkType
+      <>
+        {makingDrinkType === "hot-chocolate" && (
+          <HotChocolateMaker 
+            onComplete={(toppings) => {
+              // When done making, add to currentDrink
+              setCurrentDrink({
+                base: ["hot-chocolate"],
+                extras: toppings
+              });
+              setIsMaking(false);
+              setMakingDrinkType(null);
+            }}
+            onCancel={() => {
+              setIsMaking(false);
+              setMakingDrinkType(null);
+            }}
+          />
+        )}
+      </>
+    )}
+    
+    {/* Only show serve/clear if a drink is made */}
+    {!isMaking && currentDrink.base.length > 0 && (
+      <div>
+        <p>Current drink: {currentDrink.base.join(" + ")}</p>
+        <button onClick={handleServe}>Serve</button>
+        <button onClick={handleClear}>Clear</button>
+      </div>
+    )}
+  </div>
+)}
     </div>
   );
 
