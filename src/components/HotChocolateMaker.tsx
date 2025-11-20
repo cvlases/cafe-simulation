@@ -8,7 +8,7 @@
 // 5. Stirred? (yes)
 // 6. Toppings added? (later!!)
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { ExtraType } from "../types";
 
 interface HotChocolateMakerProps {
@@ -26,11 +26,21 @@ const HotChocolateMaker = ({ onComplete, onCancel }: HotChocolateMakerProps) => 
   const [stirred, setStirred] = useState(false);
   const [onFire, setOnFire] = useState(false);
 
+  const handleStoveToggle = () => {
+    if (stoveOn) {
+        // Turning off stove
+        setStoveOn(false);
+        setOnFire(false); // Put out the fire
+    } else {
+        // Turning on stove
+        setStoveOn(true);
+    }
+    };
+  
   // Heat the kettle (only works if stove is on and milk is in kettle)
   const handleHeatKettle = () => {
     if (stoveOn && milkInKettle) {
       setKettleHeated(true);
-      // TODO: Start a timer - if stove stays on too long after heating, catch fire
     }
   };
 
@@ -38,7 +48,7 @@ const HotChocolateMaker = ({ onComplete, onCancel }: HotChocolateMakerProps) => 
   const handlePourMilk = () => {
     if (kettleHeated && cupPlaced) {
       setMilkInCup(true);
-      setStoveOn(false); // Auto turn off stove when pouring? Or leave it to player?
+      // setStoveOn(false); // Auto turn off stove when pouring? Or leave it to player?
     }
   };
 
@@ -58,20 +68,39 @@ const HotChocolateMaker = ({ onComplete, onCancel }: HotChocolateMakerProps) => 
 
   // Complete - only if stirred
   const handleComplete = () => {
-    if (stirred) {
-      onComplete([]); // Empty array for now, we'll add toppings later
-    }
-  };
+  if (onFire) {
+    return; // Can't complete if there's a fire!
+  }
+  if (stirred) {
+    onComplete([]);
+  }
+};
 
 
+// Fire timer - if stove stays on after kettle is heated
+useEffect(() => {
+  if (kettleHeated && stoveOn) {
+    // Start a timer - if stove stays on for 5 seconds after heating, fire!
+    const fireTimer = setTimeout(() => {
+      setOnFire(true);
+    }, 5000); // 5 seconds
 
+    // Cleanup function - cancel timer if stove is turned off
+    return () => clearTimeout(fireTimer);
+  }
+}, [kettleHeated, stoveOn]);
   
 
   return (
     <div className="hot-chocolate-maker">
       <h2>Making Hot Chocolate</h2>
       
-      {onFire && <p style={{color: 'red'}}>🔥 THE KETTLE IS ON FIRE! 🔥</p>}
+      {onFire && (
+        <div style={{color: 'red', fontWeight: 'bold'}}>
+            <p>🔥 THE KETTLE IS ON FIRE! 🔥</p>
+            <p>Turn off the stove to put it out!</p>
+        </div>
+        )}
       
       <div className="steps">
         <button onClick={() => setCupPlaced(true)} disabled={cupPlaced}>
@@ -82,8 +111,8 @@ const HotChocolateMaker = ({ onComplete, onCancel }: HotChocolateMakerProps) => 
           Pour Milk in Kettle {milkInKettle && "✓"}
         </button>
         
-        <button onClick={() => setStoveOn(!stoveOn)}>
-          {stoveOn ? "Turn OFF Stove 🔥" : "Turn ON Stove"}
+        <button onClick={handleStoveToggle}>
+        {stoveOn ? "Turn OFF Stove 🔥" : "Turn ON Stove"}
         </button>
         
         <button 
