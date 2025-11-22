@@ -14,9 +14,10 @@ import type { ExtraType } from "../types";
 interface HotChocolateMakerProps {
   onComplete: (toppings: ExtraType[]) => void;
   onCancel: () => void;
+  onSwitchToCoffee?: () => void; // for mocha making!
 }
 
-const HotChocolateMaker = ({ onComplete, onCancel }: HotChocolateMakerProps) => {
+const HotChocolateMaker = ({ onComplete, onCancel, onSwitchToCoffee }: HotChocolateMakerProps) => {
   const [cupPlaced, setCupPlaced] = useState(false);
   const [milkInKettle, setMilkInKettle] = useState(false);
   const [stoveOn, setStoveOn] = useState(false);
@@ -77,6 +78,8 @@ const HotChocolateMaker = ({ onComplete, onCancel }: HotChocolateMakerProps) => 
 };
 
 
+
+
 // Fire timer - if stove stays on after kettle is heated
 useEffect(() => {
   if (kettleHeated && stoveOn) {
@@ -93,7 +96,7 @@ useEffect(() => {
 
   return (
     <div className="hot-chocolate-maker">
-      <h2>Making Hot Chocolate</h2>
+      <h2>Base: Hot Chocolate</h2>
       
       {onFire && (
         <div style={{color: 'red', fontWeight: 'bold'}}>
@@ -142,6 +145,13 @@ useEffect(() => {
         >
           Stir {stirred && "✓"}
         </button>
+
+
+        {stirred && onSwitchToCoffee && (
+        <button onClick={onSwitchToCoffee}>
+            Add Coffee (for Mocha) →
+        </button>
+        )}
         
         <button 
           onClick={handleComplete}

@@ -6,7 +6,8 @@ import { customers } from "./data/customers";
 import type { DrinkInProgress, DrinkType, ExtraType, Order } from "./types";
 
 import HotChocolateMaker from "./components/HotChocolateMaker";
-
+import CoffeeMaker from "./components/CoffeeMaker";
+import MochaMaker from "./components/MochaMaker";
 
 
 function App() {
@@ -26,6 +27,15 @@ function App() {
     const [makingDrinkType, setMakingDrinkType] = useState<DrinkType | null>(null);
 
 
+    //  keep track of beans across multiple drinks
+    const [coffeesUsed, setCoffeesUsed] = useState(0);
+    const beansNeedRefill = coffeesUsed >= 3; // Need refill every 3 coffees
+
+
+    // keep track of both bases for mocha
+    const [hasCoffeeBase, setHasCoffeeBase] = useState(false);
+    const [hasHotChocolateBase, setHasHotChocolateBase] = useState(false);
+    
    // ===============================================
    // customer progression
    // ===============================================
@@ -77,6 +87,8 @@ function App() {
       base: [],
       extras: []
     });
+    setHasCoffeeBase(false);
+    setHasHotChocolateBase(false);
   };
 
   // ===============================================
@@ -173,29 +185,48 @@ function App() {
   <div className="making-scene">
     <button onClick={() => setCurrentScene("order")}>← Back to Order</button>
     
+  
     {!isMaking ? (
-      // Show drink selection
       <div>
-        <h2>What are you making?</h2>
+        <h2>Choose a base to start:</h2>
+        
+        <button onClick={() => {
+          setIsMaking(true);
+          setMakingDrinkType("coffee");
+        }}>
+          Coffee Base
+        </button>
+        
         <button onClick={() => {
           setIsMaking(true);
           setMakingDrinkType("hot-chocolate");
         }}>
-          Make Hot Chocolate
+          Hot Chocolate Base
         </button>
-        {/* You'll add Coffee and Mocha buttons later */}
       </div>
     ) : (
-      // Show the appropriate maker based on makingDrinkType
       <>
-        {makingDrinkType === "hot-chocolate" && (
-          <HotChocolateMaker 
+        {makingDrinkType === "coffee" && (
+          <CoffeeMaker 
             onComplete={(toppings) => {
-              // When done making, add to currentDrink
-              setCurrentDrink({
-                base: ["hot-chocolate"],
-                extras: toppings
-              });
+              // Mark coffee as done
+              setHasCoffeeBase(true);
+              
+              // If they already made hot chocolate, it's a mocha
+              if (hasHotChocolateBase) {
+                setCurrentDrink({
+                  base: ["coffee", "hot-chocolate"],
+                  extras: toppings
+                });
+              } else {
+                // Just coffee
+                setCurrentDrink({
+                  base: ["coffee"],
+                  extras: toppings
+                });
+              }
+              
+              setCoffeesUsed(coffeesUsed + 1);
               setIsMaking(false);
               setMakingDrinkType(null);
             }}
@@ -203,13 +234,55 @@ function App() {
               setIsMaking(false);
               setMakingDrinkType(null);
             }}
+            beansNeedRefill={beansNeedRefill}
+            onBeansRefilled={() => setCoffeesUsed(0)}
+            onSwitchToHotChocolate={() => {
+              // Switch to hot chocolate maker
+              setHasCoffeeBase(true);
+              setMakingDrinkType("hot-chocolate");
+            }}
+          />
+        )}
+        
+        {makingDrinkType === "hot-chocolate" && (
+          <HotChocolateMaker 
+            onComplete={(toppings) => {
+              // Mark hot chocolate as done
+              setHasHotChocolateBase(true);
+              
+              // If they already made coffee, it's a mocha
+              if (hasCoffeeBase) {
+                setCurrentDrink({
+                  base: ["coffee", "hot-chocolate"],
+                  extras: toppings
+                });
+              } else {
+                // Just hot chocolate
+                setCurrentDrink({
+                  base: ["hot-chocolate"],
+                  extras: toppings
+                });
+              }
+              
+              setIsMaking(false);
+              setMakingDrinkType(null);
+            }}
+            onCancel={() => {
+              setIsMaking(false);
+              setMakingDrinkType(null);
+            }}
+            onSwitchToCoffee={() => {
+              // Switch to coffee maker
+              setHasHotChocolateBase(true);
+              setMakingDrinkType("coffee");
+            }}
           />
         )}
       </>
     )}
     
-    {/* Only show serve/clear if a drink is made */}
-    {!isMaking && currentDrink.base.length > 0 && (
+
+    {!isMaking && currentDrink && currentDrink.base.length > 0 && (
       <div>
         <p>Current drink: {currentDrink.base.join(" + ")}</p>
         <button onClick={handleServe}>Serve</button>
