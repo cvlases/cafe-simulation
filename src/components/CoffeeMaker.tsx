@@ -7,9 +7,10 @@ interface CoffeeMakerProps {
   beansNeedRefill: boolean; // Passed from parent to track beans across drinks
   onBeansRefilled: () => void;
   onSwitchToHotChocolate?: () => void; // mocha switch
+  hasOtherBase?: boolean; // true if hot chocie is alr made
 }
 
-const CoffeeMaker = ({ onComplete, onCancel, beansNeedRefill, onBeansRefilled, onSwitchToHotChocolate }: CoffeeMakerProps) => {
+const CoffeeMaker = ({ onComplete, onCancel, beansNeedRefill, onBeansRefilled, onSwitchToHotChocolate, hasOtherBase = false }: CoffeeMakerProps) => {
   const [cupPlaced, setCupPlaced] = useState(false);
   const [brewing, setBrewing] = useState(false);
   const [coffeeLevel, setCoffeeLevel] = useState(0); // 0-100
@@ -31,13 +32,14 @@ const CoffeeMaker = ({ onComplete, onCancel, beansNeedRefill, onBeansRefilled, o
   // Coffee fills up while brewing
   useEffect(() => {
     if (brewing) {
+        const maxLevel = hasOtherBase ? 50 : 100; // Only 50% if making mocha!
       const interval = setInterval(() => {
         setCoffeeLevel((prev) => {
           const newLevel = prev + 10; // Increase by 10 every interval
           if (newLevel >= 110) {
             setOverflowed(true); // Overflow!
             setBrewing(false);
-            return 100;
+            return maxLevel;
           }
           return newLevel;
         });
@@ -45,7 +47,7 @@ const CoffeeMaker = ({ onComplete, onCancel, beansNeedRefill, onBeansRefilled, o
 
       return () => clearInterval(interval);
     }
-  }, [brewing]);
+  }, [brewing, hasOtherBase]);
 
   // Add milk
   const handleAddMilk = () => {
@@ -118,6 +120,12 @@ const CoffeeMaker = ({ onComplete, onCancel, beansNeedRefill, onBeansRefilled, o
             Add Hot Chocolate (for Mocha) →
         </button>
         )}
+
+        <div className="status">
+            <p>Coffee Level: {coffeeLevel}%</p>
+            <p>Max Level: {hasOtherBase ? "50% (making mocha!)" : "100%"}</p>
+            <p>Brewing: {brewing ? "YES " : "NO"}</p>
+        </div>
 
         <button 
           onClick={handleComplete}

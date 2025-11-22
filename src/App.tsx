@@ -274,8 +274,13 @@ function App() {
             onSwitchToCoffee={() => {
               // Switch to coffee maker
               setHasHotChocolateBase(true);
+              setCurrentDrink({
+                base: ["hot-chocolate"],
+                extras: []
+              });
               setMakingDrinkType("coffee");
             }}
+            hasOtherBase={hasCoffeeBase}
           />
         )}
       </>

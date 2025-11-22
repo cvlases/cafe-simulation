@@ -15,14 +15,17 @@ interface HotChocolateMakerProps {
   onComplete: (toppings: ExtraType[]) => void;
   onCancel: () => void;
   onSwitchToCoffee?: () => void; // for mocha making!
+  hasOtherBase?: boolean;
 }
 
-const HotChocolateMaker = ({ onComplete, onCancel, onSwitchToCoffee }: HotChocolateMakerProps) => {
+const HotChocolateMaker = ({ onComplete, onCancel, onSwitchToCoffee,  hasOtherBase = false }: HotChocolateMakerProps) => {
   const [cupPlaced, setCupPlaced] = useState(false);
   const [milkInKettle, setMilkInKettle] = useState(false);
   const [stoveOn, setStoveOn] = useState(false);
   const [kettleHeated, setKettleHeated] = useState(false);
-  const [milkInCup, setMilkInCup] = useState(false);
+  const [pouring, setPouring] = useState(false); 
+  const [milkLevel, setMilkLevel] = useState(0); 
+  const [overflowed, setOverflowed] = useState(false);
   const [chocolateMixAdded, setChocolateMixAdded] = useState(false);
   const [stirred, setStirred] = useState(false);
   const [onFire, setOnFire] = useState(false);
@@ -46,16 +49,42 @@ const HotChocolateMaker = ({ onComplete, onCancel, onSwitchToCoffee }: HotChocol
   };
 
   // Pour milk into cup (only works if kettle is heated and cup is placed)
-  const handlePourMilk = () => {
-    if (kettleHeated && cupPlaced) {
-      setMilkInCup(true);
-      // setStoveOn(false); // Auto turn off stove when pouring? Or leave it to player?
+  const handleStartPouring = () => {
+    if (kettleHeated && cupPlaced && !pouring && !overflowed) {
+      setPouring(true);
     }
   };
 
+    // Stop pouring
+  const handleStopPouring = () => {
+    setPouring(false);
+  };
+
+   // Milk fills up while pouring
+  useEffect(() => {
+    if (pouring) {
+      const maxLevel = hasOtherBase ? 50 : 100; // Only 50% if making mocha!
+      
+      const interval = setInterval(() => {
+        setMilkLevel((prev) => {
+          const newLevel = prev + 10;
+          if (newLevel >= maxLevel + 20) {
+            setOverflowed(true);
+            setPouring(false);
+            return maxLevel;
+          }
+          return newLevel;
+        });
+      }, 500);
+
+      return () => clearInterval(interval);
+    }
+  }, [pouring, hasOtherBase]);
+
+
   // Add chocolate mix - only if milk is in cup
   const handleAddChocolate = () => {
-    if (milkInCup) {
+    if (milkLevel > 0 && !overflowed) {
       setChocolateMixAdded(true);
     }
   };
@@ -104,6 +133,12 @@ useEffect(() => {
             <p>Turn off the stove to put it out!</p>
         </div>
         )}
+
+        {overflowed && (
+        <p style={{color: 'red', fontWeight: 'bold'}}>
+          🥛 MILK OVERFLOWED! Start over.
+        </p>
+      )}
       
       <div className="steps">
         <button onClick={() => setCupPlaced(true)} disabled={cupPlaced}>
@@ -126,15 +161,21 @@ useEffect(() => {
         </button>
         
         <button 
-          onClick={handlePourMilk}
-          disabled={milkInCup || !kettleHeated || !cupPlaced}
+          onClick={handleStartPouring}
+          disabled={!kettleHeated || !cupPlaced || pouring || overflowed || milkLevel > 0}
         >
-          Pour Milk into Cup {milkInCup && "✓"}
+          Start Pouring Milk
         </button>
+
+        {pouring && (
+          <button onClick={handleStopPouring}>
+            STOP Pouring ⚠️
+          </button>
+        )}
         
         <button 
           onClick={handleAddChocolate}
-          disabled={chocolateMixAdded || !milkInCup}
+          disabled={chocolateMixAdded || milkLevel === 0 || overflowed}
         >
           Add Chocolate Mix {chocolateMixAdded && "✓"}
         </button>
@@ -155,11 +196,17 @@ useEffect(() => {
         
         <button 
           onClick={handleComplete}
-          disabled={!stirred}
+          disabled={!stirred || overflowed}
         >
           Done!
         </button>
         
+      </div>
+
+      <div className="status">
+        <p>Milk Level: {milkLevel}%</p>
+        <p>Max Level: {hasOtherBase ? "50% (making mocha!)" : "100%"}</p>
+        <p>Pouring: {pouring ? "YES 🥛" : "NO"}</p>
       </div>
       
       <button onClick={onCancel}>Cancel / Start Over</button>
