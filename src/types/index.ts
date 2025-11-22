@@ -24,4 +24,18 @@ export interface Customer {
   patience: number;     // a number like 100 that counts down
 }
 
+// calculate the drink scoring system
+export interface DrinkScore {
+  coffeeLevel?: number;      // 0-100 score based on fill level
+  hotChocolateTemp?: number; // 0-100 score based on temp
+  milkLevel?: number;        // 0-100 score based on milk level
+  stirringDuration?: number; // 0-100 score based on stir time
+  mochaRatio?: number;       // 0-100 score based on 50/50 ratio
+  overflow?: boolean;        // true = major penalty
+  whippedCreamFirst?: boolean; // false if added after others
+  whippedCreamDuration?: number; // 0-100 based on hold time
+  toppingsCorrect?: number;  // 0-100 based on matching order
+  totalScore?: number;       // Final percentage
+}
+
 // use 'export' on these types so that other files can access them

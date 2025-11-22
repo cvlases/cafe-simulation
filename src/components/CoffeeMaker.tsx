@@ -2,7 +2,10 @@ import { useState, useEffect } from "react";
 import type { ExtraType } from "../types";
 
 interface CoffeeMakerProps {
-  onComplete: (toppings: ExtraType[]) => void;
+  onComplete:  (metrics: {
+    coffeeLevel: number;
+    overflowed: boolean;
+  }) => void;
   onCancel: () => void;
   beansNeedRefill: boolean; // Passed from parent to track beans across drinks
   onBeansRefilled: () => void;
@@ -61,9 +64,12 @@ const CoffeeMaker = ({ onComplete, onCancel, beansNeedRefill, onBeansRefilled, o
   // Complete
   const handleComplete = () => {
     if (milkAdded && !overflowed) {
-      onComplete([]);
+        onComplete({
+        coffeeLevel,
+        overflowed
+        });
     }
-  };
+    };
 
   return (
     <div className="coffee-maker">

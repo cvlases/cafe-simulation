@@ -3,6 +3,7 @@ import { useState } from "react";
 import Customer from "./components/Customer";
 import Station from "./components/Station";
 import { customers } from "./data/customers";
+import { calculateScore } from "./utils/scoring";
 import type { DrinkInProgress, DrinkType, ExtraType, Order } from "./types";
 
 import HotChocolateMaker from "./components/HotChocolateMaker";
@@ -10,6 +11,10 @@ import CoffeeMaker from "./components/CoffeeMaker";
 import MochaMaker from "./components/MochaMaker";
 
 import ToppingStation from "./components/ToppingStation";
+import Scorecard from './components/Scorecard';
+
+import { calculateEarnings, formatMoney } from "./utils/money";
+import type { Transaction } from "./utils/money"
 
 function App() {
     // Create state for the drink being made
@@ -42,6 +47,32 @@ function App() {
     const [showToppingStation, setShowToppingStation] = useState(false);
     const [currentToppings, setCurrentToppings] = useState<ExtraType[]>([]);
 
+    // track the metrics
+    const [drinkMetrics, setDrinkMetrics] = useState<{
+      coffeeLevel?: number;
+      hotChocolateTemp?: number;
+      milkLevel?: number;
+      stirringDuration?: number;
+      overflowed?: boolean;
+      whippedCreamFirst?: boolean;
+      whippedCreamDuration?: number;
+    }>({});
+
+    // customer scores you
+    const [showScorecard, setShowScorecard] = useState(false);
+    const [lastScore, setLastScore] = useState(0);
+
+    // get yer money
+    const [totalEarnings, setTotalEarnings] = useState(0);
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [lastEarnings, setLastEarnings] = useState<{
+      amount: number;
+      tip: number;
+      refunded: boolean;
+    }>({ amount: 0, tip: 0, refunded: false });
+
+
+    
    // ===============================================
    // customer progression
    // ===============================================
@@ -97,6 +128,7 @@ function App() {
     setHasHotChocolateBase(false);
     setCurrentToppings([]); 
     setShowToppingStation(false); 
+    setDrinkMetrics({});
   };
 
   // ===============================================
@@ -151,29 +183,65 @@ function App() {
 
   const handleServe = () => {
     console.log("Served:", currentDrink);
+    console.log("Metrics:", drinkMetrics);
+    
     const currentCustomer = customers[currentCustomerIndex];
-    // Check if it matches the order
-    const isCorrect = checkOrder(currentDrink, currentCustomer.order);
+    // // Check if it matches the order
+    // const isCorrect = checkOrder(currentDrink, currentCustomer.order);
   
-    if (isCorrect) {
-      console.log("Correct! Great job!");
-      setMessage("Correct! Great job!");
-    } else {
-      console.log("Wrong order!");
-      setMessage("Wrong order!");
-    }
-    handleClear(); // Reset for next drink
+    // if (isCorrect) {
+    //   console.log("Correct! Great job!");
+    //   setMessage("Correct! Great job!");
+    // } else {
+    //   console.log("Wrong order!");
+    //   setMessage("Wrong order!");
+    // }
 
-    // Move to next customer
-    if (currentCustomerIndex < customers.length - 1) {
-      setCurrentCustomerIndex(currentCustomerIndex + 1);
-    } else {
-      setMessage("Day complete! You served all customers!");
-    }
+    const score = calculateScore(currentDrink, currentCustomer.order, drinkMetrics);
+      
+      console.log("Score:", score);
+      
+      
+
+        // Calculate earnings
+    const earnings = calculateEarnings(score);
+    const totalFromOrder = earnings.amount + earnings.tip;
+    
+    // Update total earnings
+    setTotalEarnings(totalEarnings + totalFromOrder);
+    
+    // Record transaction
+    const transaction: Transaction = {
+      customerId: currentCustomer.id,
+      score,
+      amount: earnings.amount,
+      tip: earnings.tip,
+      refunded: earnings.refunded
+    };
+    setTransactions([...transactions, transaction]);
+  
+    // Save earnings for scorecard
+    setLastEarnings(earnings);
+    setLastScore(score);
+    setShowScorecard(true);
+
+    // Set message based on score and earnings
+    setLastScore(score);
+    setShowScorecard(true);
 
   };
 
-
+const handleContinueAfterScore = () => {
+  setShowScorecard(false);
+  handleClear();
+  
+  // Move to next customer
+  if (currentCustomerIndex < customers.length - 1) {
+    setCurrentCustomerIndex(currentCustomerIndex + 1);
+  } else {
+    setMessage("Day complete! You served all customers!");
+  }
+};
 
   
 
@@ -181,6 +249,18 @@ function App() {
     <div>
       <h1>Café Simulator</h1>
       
+      <div className="earnings-display">
+      <h3>Total Earnings: {formatMoney(totalEarnings)}</h3>
+    </div>
+
+      {showScorecard && (
+        <Scorecard 
+          score={lastScore}
+          customerName={customers[currentCustomerIndex].name}
+          earnings={lastEarnings}
+          onContinue={handleContinueAfterScore}
+        />
+      )}
       
       {currentScene === "order" && (
         <div className="order-scene">
@@ -220,7 +300,15 @@ function App() {
         onAddTopping={(topping) => {
           setCurrentToppings([...currentToppings, topping]);
         }}
-        onComplete={() => {
+        onComplete={(metrics) => {
+
+          // Save topping metrics
+          setDrinkMetrics({
+            ...drinkMetrics,
+            whippedCreamFirst: metrics.whippedCreamFirst,
+            whippedCreamDuration: metrics.whippedCreamDuration
+          });
+
           // Add toppings to drink
           setCurrentDrink({
             ...currentDrink,
@@ -237,9 +325,16 @@ function App() {
       <>
         {makingDrinkType === "coffee" && (
           <CoffeeMaker 
-            onComplete={(toppings) => {
+            onComplete={(metrics) => {
               // Mark coffee as done
               setHasCoffeeBase(true);
+
+              // Save coffee metrics
+              setDrinkMetrics({
+                ...drinkMetrics,
+                coffeeLevel: metrics.coffeeLevel,
+                overflowed: metrics.overflowed
+              });
               
               // If they already made hot chocolate, it's a mocha
               if (hasHotChocolateBase) {
@@ -281,9 +376,18 @@ function App() {
         
         {makingDrinkType === "hot-chocolate" && (
           <HotChocolateMaker 
-            onComplete={(toppings) => {
+            onComplete={(metrics) => {
               // Mark hot chocolate as done
               setHasHotChocolateBase(true);
+
+              // Save hot chocolate metrics
+              setDrinkMetrics({
+                ...drinkMetrics,
+                hotChocolateTemp: metrics.temperature,
+                milkLevel: metrics.milkLevel,
+                stirringDuration: metrics.stirringDuration,
+                overflowed: metrics.overflowed
+              });
               
               // If they already made coffee, it's a mocha
               if (hasCoffeeBase) {

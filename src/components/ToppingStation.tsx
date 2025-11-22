@@ -4,46 +4,49 @@ import type { ExtraType } from "../types";
 interface ToppingStationProps {
   currentToppings: ExtraType[];
   onAddTopping: (topping: ExtraType) => void;
-  onComplete: () => void;
+  onComplete: (metrics: {
+    whippedCreamFirst: boolean;
+    whippedCreamDuration: number;
+  }) => void;
   onCancel: () => void;
 }
 
 const ToppingStation = ({ currentToppings, onAddTopping, onComplete, onCancel }: ToppingStationProps) => {
   const [holdingWhippedCream, setHoldingWhippedCream] = useState(false);
+  const [whippedCreamHoldTime, setWhippedCreamHoldTime] = useState(0); // Track actual hold time in ms
+
   const [whippedCreamProgress, setWhippedCreamProgress] = useState(0);
   const hasAddedRef = useRef(false); // Track if we already added it
 
   const hasWhippedCream = currentToppings.includes("whipped-cream");
   const hasOtherToppings = currentToppings.includes("marshmallows") || currentToppings.includes("sprinkles");
 
-  // Timer for whipped cream hold
-  useEffect(() => {
-    if (holdingWhippedCream && !hasWhippedCream && !hasOtherToppings) {
-      const interval = setInterval(() => {
-        setWhippedCreamProgress((prev) => {
-          const newProgress = prev + 4;
-          if (newProgress >= 100 && !hasAddedRef.current) {
-            // Mark as added and schedule the state update
-            hasAddedRef.current = true;
-            setHoldingWhippedCream(false);
-            // Use setTimeout to defer the state update
-            setTimeout(() => {
-              onAddTopping("whipped-cream");
-              hasAddedRef.current = false;
-            }, 0);
-            return 100;
-          }
-          return newProgress;
-        });
-      }, 200);
+useEffect(() => {
+  if (holdingWhippedCream && !hasWhippedCream && !hasOtherToppings) {
+    const startTime = Date.now();
+    const interval = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      setWhippedCreamProgress((prev) => {
+        const newProgress = prev + 4;
+        if (newProgress >= 100 && !hasAddedRef.current) {
+          hasAddedRef.current = true;
+          setHoldingWhippedCream(false);
+          setWhippedCreamHoldTime(elapsed); // Save how long they held
+          setTimeout(() => {
+            onAddTopping("whipped-cream");
+            hasAddedRef.current = false;
+          }, 0);
+          return 100;
+        }
+        return newProgress;
+      });
+    }, 200);
 
-      return () => clearInterval(interval);
-    } else if (!holdingWhippedCream) {
-      // Reset if they let go before finishing
-      setWhippedCreamProgress(0);
-    }
-  }, [holdingWhippedCream, hasWhippedCream, hasOtherToppings, onAddTopping]);
-
+    return () => clearInterval(interval);
+  } else if (!holdingWhippedCream) {
+    setWhippedCreamProgress(0);
+  }
+}, [holdingWhippedCream, hasWhippedCream, hasOtherToppings, onAddTopping]);
   return (
     <div className="topping-station">
       <h2>Add Toppings</h2>
@@ -102,7 +105,16 @@ const ToppingStation = ({ currentToppings, onAddTopping, onComplete, onCancel }:
       </div>
 
           
-      <button onClick={onComplete}>Finish Drink</button>
+      <button onClick={() => {
+  const whippedCreamFirst = currentToppings.length === 0 || currentToppings[0] === "whipped-cream";
+  onComplete({
+    whippedCreamFirst,
+    whippedCreamDuration: whippedCreamHoldTime
+  });
+}}>
+  Finish Drink
+</button>
+
       <button onClick={onCancel}>Cancel / Start Over</button>
     </div>
   );

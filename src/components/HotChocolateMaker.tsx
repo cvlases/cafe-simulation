@@ -12,7 +12,12 @@ import { useState, useEffect } from "react";
 import type { ExtraType } from "../types";
 
 interface HotChocolateMakerProps {
-  onComplete: (toppings: ExtraType[]) => void;
+  onComplete: (metrics: {
+    milkLevel: number;
+    temperature: number;
+    stirringDuration: number;
+    overflowed: boolean;
+  }) => void;
   onCancel: () => void;
   onSwitchToCoffee?: () => void; // for mocha making!
   hasOtherBase?: boolean;
@@ -23,11 +28,14 @@ const HotChocolateMaker = ({ onComplete, onCancel, onSwitchToCoffee,  hasOtherBa
   const [milkInKettle, setMilkInKettle] = useState(false);
   const [stoveOn, setStoveOn] = useState(false);
   const [kettleHeated, setKettleHeated] = useState(false);
+  const [temperature, setTemperature] = useState(0); // 0-200
   const [pouring, setPouring] = useState(false); 
   const [milkLevel, setMilkLevel] = useState(0); 
   const [overflowed, setOverflowed] = useState(false);
   const [chocolateMixAdded, setChocolateMixAdded] = useState(false);
   const [stirred, setStirred] = useState(false);
+  const [stirringDuration, setStirringDuration] = useState(0); // seconds
+  const [isStirring, setIsStirring] = useState(false);
   const [onFire, setOnFire] = useState(false);
 
   const handleStoveToggle = () => {
@@ -43,10 +51,25 @@ const HotChocolateMaker = ({ onComplete, onCancel, onSwitchToCoffee,  hasOtherBa
   
   // Heat the kettle (only works if stove is on and milk is in kettle)
   const handleHeatKettle = () => {
-    if (stoveOn && milkInKettle) {
-      setKettleHeated(true);
+    if (stoveOn && milkInKettle && temperature >= 160) { // "Hot" threshold
+        setKettleHeated(true);
     }
-  };
+    };
+
+// Temperature increases while stove is on
+useEffect(() => {
+  if (stoveOn && milkInKettle) {
+    const interval = setInterval(() => {
+      setTemperature((prev) => {
+        const newTemp = prev + 10; // Increase temp
+        if (newTemp >= 200) return 200;
+        return newTemp;
+      });
+    }, 500);
+    return () => clearInterval(interval);
+  }
+}, [stoveOn, milkInKettle]);
+
 
   // Pour milk into cup (only works if kettle is heated and cup is placed)
   const handleStartPouring = () => {
@@ -68,7 +91,7 @@ const HotChocolateMaker = ({ onComplete, onCancel, onSwitchToCoffee,  hasOtherBa
       const interval = setInterval(() => {
         setMilkLevel((prev) => {
           const newLevel = prev + 10;
-          if (newLevel >= maxLevel + 20) {
+          if (newLevel >= maxLevel + 40) {
             setOverflowed(true);
             setPouring(false);
             return maxLevel;
@@ -90,19 +113,29 @@ const HotChocolateMaker = ({ onComplete, onCancel, onSwitchToCoffee,  hasOtherBa
   };
 
   // Stir - only if chocolate is added
-  const handleStir = () => {
-    if (chocolateMixAdded) {
-      setStirred(true);
+    // Stirring timer
+    useEffect(() => {
+    if (isStirring) {
+        const interval = setInterval(() => {
+        setStirringDuration((prev) => prev + 1); // 1 second per interval
+        }, 1000);
+        return () => clearInterval(interval);
     }
-  };
+    }, [isStirring]);
+
 
   // Complete - only if stirred
   const handleComplete = () => {
   if (onFire) {
     return; // Can't complete if there's a fire!
   }
-  if (stirred) {
-    onComplete([]);
+  if (stirringDuration >= 3 && !overflowed) {
+    onComplete({
+      milkLevel,
+      temperature,
+      stirringDuration,
+      overflowed
+    });
   }
 };
 
@@ -181,10 +214,14 @@ useEffect(() => {
         </button>
         
         <button 
-          onClick={handleStir}
-          disabled={stirred || !chocolateMixAdded}
-        >
-          Stir {stirred && "✓"}
+            onMouseDown={() => setIsStirring(true)}
+            onMouseUp={() => setIsStirring(false)}
+            onMouseLeave={() => setIsStirring(false)}
+            onTouchStart={() => setIsStirring(true)}
+            onTouchEnd={() => setIsStirring(false)}
+            disabled={!chocolateMixAdded}
+            >
+            {stirringDuration > 0 ? `Stirred for ${stirringDuration}s` : "HOLD to Stir"}
         </button>
 
 
@@ -196,17 +233,20 @@ useEffect(() => {
         
         <button 
           onClick={handleComplete}
-          disabled={!stirred || overflowed}
+          disabled={stirringDuration < 3 || overflowed || onFire}
         >
-          Done!
+          Done! {stirringDuration < 0 && `(Stir for ${3 - stirringDuration}s more)`}
         </button>
         
       </div>
 
       <div className="status">
+          <p>Temperature: {temperature}°F {temperature >= 160 && "🔥 HOT!"}</p>
         <p>Milk Level: {milkLevel}%</p>
         <p>Max Level: {hasOtherBase ? "50% (making mocha!)" : "100%"}</p>
         <p>Pouring: {pouring ? "YES 🥛" : "NO"}</p>
+          <p>Stirring: {isStirring ? `YES (${stirringDuration}s)` : "NO"}</p>
+
       </div>
       
       <button onClick={onCancel}>Cancel / Start Over</button>
