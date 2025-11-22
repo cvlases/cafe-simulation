@@ -9,6 +9,7 @@ import HotChocolateMaker from "./components/HotChocolateMaker";
 import CoffeeMaker from "./components/CoffeeMaker";
 import MochaMaker from "./components/MochaMaker";
 
+import ToppingStation from "./components/ToppingStation";
 
 function App() {
     // Create state for the drink being made
@@ -36,6 +37,11 @@ function App() {
     const [hasCoffeeBase, setHasCoffeeBase] = useState(false);
     const [hasHotChocolateBase, setHasHotChocolateBase] = useState(false);
     
+
+    // topping station 
+    const [showToppingStation, setShowToppingStation] = useState(false);
+    const [currentToppings, setCurrentToppings] = useState<ExtraType[]>([]);
+
    // ===============================================
    // customer progression
    // ===============================================
@@ -89,6 +95,8 @@ function App() {
     });
     setHasCoffeeBase(false);
     setHasHotChocolateBase(false);
+    setCurrentToppings([]); 
+    setShowToppingStation(false); 
   };
 
   // ===============================================
@@ -186,7 +194,8 @@ function App() {
     <button onClick={() => setCurrentScene("order")}>← Back to Order</button>
     
   
-    {!isMaking ? (
+    {!isMaking && !showToppingStation ? (
+      // show bases
       <div>
         <h2>Choose a base to start:</h2>
         
@@ -204,6 +213,26 @@ function App() {
           Hot Chocolate Base
         </button>
       </div>
+    ) : showToppingStation ? (
+      // Show topping station
+      <ToppingStation 
+        currentToppings={currentToppings}
+        onAddTopping={(topping) => {
+          setCurrentToppings([...currentToppings, topping]);
+        }}
+        onComplete={() => {
+          // Add toppings to drink
+          setCurrentDrink({
+            ...currentDrink,
+            extras: currentToppings
+          });
+          setShowToppingStation(false);
+        }}
+        onCancel={() => {
+          // Clear everything and go back to base selection
+          handleClear();
+        }}
+      />
     ) : (
       <>
         {makingDrinkType === "coffee" && (
@@ -216,19 +245,20 @@ function App() {
               if (hasHotChocolateBase) {
                 setCurrentDrink({
                   base: ["coffee", "hot-chocolate"],
-                  extras: toppings
+                  extras: []
                 });
               } else {
                 // Just coffee
                 setCurrentDrink({
                   base: ["coffee"],
-                  extras: toppings
+                  extras: []
                 });
               }
               
               setCoffeesUsed(coffeesUsed + 1);
               setIsMaking(false);
               setMakingDrinkType(null);
+              setShowToppingStation(true);
             }}
             onCancel={() => {
               setIsMaking(false);
@@ -239,8 +269,13 @@ function App() {
             onSwitchToHotChocolate={() => {
               // Switch to hot chocolate maker
               setHasCoffeeBase(true);
+              setCurrentDrink({
+                base: ["coffee"],
+                extras: []
+              });
               setMakingDrinkType("hot-chocolate");
             }}
+            hasOtherBase={hasHotChocolateBase}
           />
         )}
         
@@ -254,22 +289,24 @@ function App() {
               if (hasCoffeeBase) {
                 setCurrentDrink({
                   base: ["coffee", "hot-chocolate"],
-                  extras: toppings
+                  extras: []
                 });
               } else {
                 // Just hot chocolate
                 setCurrentDrink({
                   base: ["hot-chocolate"],
-                  extras: toppings
+                  extras: []
                 });
               }
               
               setIsMaking(false);
               setMakingDrinkType(null);
+              setShowToppingStation(true);
             }}
             onCancel={() => {
               setIsMaking(false);
               setMakingDrinkType(null);
+              setShowToppingStation(false);
             }}
             onSwitchToCoffee={() => {
               // Switch to coffee maker
@@ -287,7 +324,7 @@ function App() {
     )}
     
 
-    {!isMaking && currentDrink && currentDrink.base.length > 0 && (
+    {!isMaking && !showToppingStation && currentDrink && currentDrink.base.length > 0 && (
       <div>
         <p>Current drink: {currentDrink.base.join(" + ")}</p>
         <button onClick={handleServe}>Serve</button>
