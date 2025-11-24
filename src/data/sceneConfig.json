@@ -1,0 +1,48 @@
+{
+  "orderScene": {
+    "background": "../src/assets/backgrounds/order_bg.jpg",
+    "elements": {
+      "customer": {
+        "x": 100,
+        "y": 300,
+        "width": 500,
+        "height": 500
+      },
+      "orderDisplay": {
+        "x": 100,
+        "y": 150,
+        "width": 250,
+        "height": 150
+      },
+      "startButton": {
+        "x": 500,
+        "y": 400,
+        "width": 150,
+        "height": 60
+      }
+    }
+  },
+  "makingScene": {
+    "background": "../src/assets/backgrounds/making_bg.PNG",
+    "elements": {
+      "coffeeButton": {
+        "x": 100,
+        "y": 300,
+        "width": 150,
+        "height": 80
+      },
+      "hotChocolateButton": {
+        "x": 300,
+        "y": 300,
+        "width": 150,
+        "height": 80
+      },
+      "cup": {
+        "x": 500,
+        "y": 400,
+        "width": 100,
+        "height": 120
+      }
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import './App.css'
 import { useState } from "react";
+
 import Customer from "./components/Customer";
 import Station from "./components/Station";
 import { customers } from "./data/customers";
@@ -16,7 +17,19 @@ import Scorecard from './components/Scorecard';
 import { calculateEarnings, formatMoney } from "./utils/money";
 import type { Transaction } from "./utils/money"
 
+// ------
+
+import sceneConfig from './data/sceneConfig.json';
+import type { SceneConfig } from './types';
+
+// ------
+
+import { useAssets } from './hooks/useAssets';
+import GameImage from './components/GameImage';
+import GameButton from './components/GameButton';
+
 function App() {
+  const { assets, layouts, } = useAssets();
     // Create state for the drink being made
   const [currentDrink, setCurrentDrink] = useState<DrinkInProgress>({
     base: [],
@@ -71,7 +84,9 @@ function App() {
       refunded: boolean;
     }>({ amount: 0, tip: 0, refunded: false });
 
-
+    // configs
+    const orderConfig = sceneConfig.orderScene as SceneConfig;
+    const makingConfig = sceneConfig.makingScene as SceneConfig;
     
    // ===============================================
    // customer progression
@@ -79,7 +94,11 @@ function App() {
   // state to track what customer we are on
   const [currentCustomerIndex, setCurrentCustomerIndex] = useState<number>(0);
   
-
+  // image helper function:
+    const getCustomerImage = (customerId: number): string => {
+      const key = `customer${customerId}` as keyof typeof assets.customers;
+      return assets.customers[key] || '';
+    };
 
   // ===============================================
   // is the drink made correctly?
@@ -231,25 +250,66 @@ function App() {
 
   };
 
-const handleContinueAfterScore = () => {
-  setShowScorecard(false);
-  handleClear();
-  
-  // Move to next customer
-  if (currentCustomerIndex < customers.length - 1) {
-    setCurrentCustomerIndex(currentCustomerIndex + 1);
-  } else {
-    setMessage("Day complete! You served all customers!");
-  }
-};
+  const handleContinueAfterScore = () => {
+    setShowScorecard(false);
+    handleClear();
+    
+    // Move to next customer
+    if (currentCustomerIndex < customers.length - 1) {
+      setCurrentCustomerIndex(currentCustomerIndex + 1);
+    } else {
+      setMessage("Day complete! You served all customers!");
+    }
+  };
 
-  
+  // if (!isLoaded) {
+  //   return (
+  //     <div style={{ 
+  //       display: 'flex', 
+  //       flexDirection: 'column',
+  //       alignItems: 'center', 
+  //       justifyContent: 'center', 
+  //       height: '100vh',
+  //       backgroundColor: '#f0f0f0'
+  //     }}>
+  //       <h1>☕ Loading Café Simulator...</h1>
+  //       <p>Getting everything ready...</p>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div>
       <h1>Café Simulator</h1>
       
-      <div className="earnings-display">
+      
+      
+      {currentScene === "order" && (
+        <div 
+          // className="order-scene"
+          // style={{
+          //   backgroundImage: `url(${orderBackground})`,
+          //   backgroundSize: '100% 100%', // Stretch to fit container
+          //   backgroundPosition: 'center',
+          //   backgroundRepeat: 'no-repeat',
+          //   height: '1000px', // Fixed height
+          //   width: '1000px', // Fixed width (adjust to match your image ratio)
+          //   margin: '0 auto', // Center the game
+          //   position: 'relative'
+          // }}
+          className="order-scene"
+                  style={{
+                    backgroundImage: `url(${assets.backgrounds.orderScene})`,
+                    height: `${layouts.orderScene.container.height}px`,
+                    width: `${layouts.orderScene.container.width}px`,
+                    margin: '0 auto',
+                    position: 'relative',
+                    backgroundSize: '100% 100%'
+                  }}
+        >
+
+
+<div className="earnings-display">
       <h3>Total Earnings: {formatMoney(totalEarnings)}</h3>
     </div>
 
@@ -261,18 +321,68 @@ const handleContinueAfterScore = () => {
           onContinue={handleContinueAfterScore}
         />
       )}
+
+        <div style={{
+      position: 'absolute',
+      left: `${orderConfig.elements.customer.x}px`,
+      top: `${orderConfig.elements.customer.y}px`,
+      width: `${orderConfig.elements.customer.width}px`,
+      height: `${orderConfig.elements.customer.height}px`
+    }}>
       
-      {currentScene === "order" && (
-        <div className="order-scene">
-          <Customer customer={customers[currentCustomerIndex]} />
-          <button onClick={() => setCurrentScene("making")}>Start Making →</button>
-        </div>
-      )}
+      <Customer 
+        customer={customers[currentCustomerIndex]} 
+        imageUrl={getCustomerImage(customers[currentCustomerIndex].id)}
+      />
+    </div>
+    
+    <button 
+      onClick={() => setCurrentScene("making")}
+      style={{
+        position: 'absolute',
+        left: `${orderConfig.elements.startButton.x}px`,
+        top: `${orderConfig.elements.startButton.y}px`,
+        width: `${orderConfig.elements.startButton.width}px`,
+        height: `${orderConfig.elements.startButton.height}px`
+      }}
+    >
+
+      Start Making →
+    </button>
+  </div>
+)}
       
       {currentScene === "making" && (
-  <div className="making-scene">
-    <button onClick={() => setCurrentScene("order")}>← Back to Order</button>
-    
+        <div 
+          className="making-scene"
+          style={{
+
+            backgroundImage: `url(${assets.backgrounds.makingScene})`,
+            
+            // Use layout dimensions:
+            height: `${layouts.makingScene.container.height}px`,
+            width: `${layouts.makingScene.container.width}px`,
+            
+            // Keep your existing styles:
+            margin: '0 auto',
+            position: 'relative',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        >
+
+          {/* Back button */}
+          <button 
+            onClick={() => setCurrentScene("order")}
+            style={{
+              position: 'absolute',
+              top: 20,
+              left: 20
+            }}
+          >
+            ← Back to Order
+          </button>
   
     {!isMaking && !showToppingStation ? (
       // show bases
@@ -371,6 +481,7 @@ const handleContinueAfterScore = () => {
               setMakingDrinkType("hot-chocolate");
             }}
             hasOtherBase={hasHotChocolateBase}
+            coffeesUsed={coffeesUsed}
           />
         )}
         

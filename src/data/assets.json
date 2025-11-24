@@ -1,0 +1,60 @@
+{
+  "backgrounds": {
+    "orderScene": "../src/assets/backgrounds/order_bg.jpg",
+    "makingScene": "../src/assets/backgrounds/making_bg.PNG"
+  },
+  "customers": {
+    "customer1": "../src/assets/customers/customer1.png",
+    "customer2": "../src/assets/customers/customer2.png",
+    "customer3": "../src/assets/customers/customer3.png"
+  },
+
+
+
+
+
+  "objects": {
+    "cup": {
+      "empty": "../src/assets/objects/cup_empty.png",
+      "coffee_full": "../src/assets/objects/cup_coffee_full.png",
+      "overflow": "../src/assets/objects/cup_overflow.png",
+      "stack": "../src/assets/objects/cup_stack.png"
+    },
+    "coffeeMaker": {
+      "idle": "/assets/objects/coffee_maker_idle.png",
+      "brewing": "/assets/objects/coffee_maker_brewing.png"
+    },
+    "beans": {
+      "full": "../src/assets/objects/beans_jar_full.png",
+      "half": "../src/assets/objects/beans_jar_half.png",
+      "empty": "../src/assets/objects/beans_jar_empty.png"
+    },
+    "kettle": {
+      "empty": "/assets/objects/kettle_empty.png",
+      "full": "/assets/objects/kettle_full.png",
+      "heating": "/assets/objects/kettle_heating.png"
+    },
+    "stove": {
+      "off": "/assets/objects/stove_off.png",
+      "on": "/assets/objects/stove_on.png",
+      "fire": "/assets/objects/stove_fire.png"
+    },
+    "toppings": {
+      "whippedCream": "/assets/objects/whipped_cream.png",
+      "marshmallows": "/assets/objects/marshmallows.png",
+      "sprinkles": "/assets/objects/sprinkles.png"
+    }
+  },
+  "buttons": {
+    "startMaking": "/assets/buttons/start_making.png",
+    "serve": "/assets/buttons/serve.png",
+    "clear": "/assets/buttons/clear.png"
+  },
+  "animations": {
+    "pour": [
+      "/assets/animations/pour_01.png",
+      "/assets/animations/pour_02.png",
+      "/assets/animations/pour_03.png"
+    ]
+  }
+}

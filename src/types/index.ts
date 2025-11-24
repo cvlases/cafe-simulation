@@ -39,3 +39,17 @@ export interface DrinkScore {
 }
 
 // use 'export' on these types so that other files can access them
+
+export interface ElementPosition {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export interface SceneConfig {
+  background: string;
+  elements: {
+    [key: string]: ElementPosition;
+  };
+}
