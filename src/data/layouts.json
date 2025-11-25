@@ -25,29 +25,53 @@
       }
     }
   },
+
+
   "makingScene": {
     "container": {
-      "width": 1000,
-      "height": 700
+      "width": 1200,
+      "height": 800
     },
-    "elements": {
-      "cup": {
-        "x": 400,
-        "y": 450,
-        "width": 80,
-        "height": 100
+    "coffeeMakerScene": {
+      "cupStack": {
+        "x": 100,
+        "y": 150,
+        "width": 160
       },
-      "coffeeMaker": {
-        "x": 150,
-        "y": 200,
-        "width": 120,
-        "height": 180
+      "coffeeMachine": {
+        "x": 300,
+        "y": -150,
+        "width": 500,
+        "dropZone": {
+          "top": 240,
+          "width": 100,
+          "height": 100
+        },
+        "cupOnMachine": {
+          "width": 100
+        }
       },
-      "stove": {
-        "x": 550,
-        "y": 350,
-        "width": 100,
-        "height": 80
+      "beansJar": {
+        "x": 850,
+        "y": 150,
+        "width": 100
+      },
+      "counter": {
+        "x": 500,
+        "y": 400,
+        "maxWidth": 220,
+        "dropZone": {
+          "width": 150,
+          "height": 100
+        },
+        "cupOnCounter": {
+          "width": 120
+        },
+        "milk": {
+          "x": 150,
+          "y": 250,
+          "width": 300
+        }
       }
     }
   }

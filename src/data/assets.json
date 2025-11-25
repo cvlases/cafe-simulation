@@ -32,6 +32,10 @@
       "half": "../src/assets/objects/beans_jar_half.png",
       "empty": "../src/assets/objects/beans_jar_empty.png"
     },
+    "milk": {
+      "container": "../src/assets/objects/milk_container.png",
+      "pouring": "../src/assets/objects/milk_pouring.png"
+    },
     "kettle": {
       "empty": "/assets/objects/kettle_empty.png",
       "full": "/assets/objects/kettle_full.png",

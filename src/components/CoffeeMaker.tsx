@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import type { ExtraType } from "../types";
 import { useAssets } from '../hooks/useAssets';
+import { useLayouts } from '../hooks/useLayouts';
 import DraggableImage from './DraggableImage';
 import DropZone from './DropZone';
 
@@ -27,21 +27,23 @@ const CoffeeMaker = ({
   coffeesUsed 
 }: CoffeeMakerProps) => {
   const { assets } = useAssets();
-
-
+  const { layouts } = useLayouts();
+  
+  // Shorthand for coffee maker layout
+  const layout = layouts.makingScene.coffeeMakerScene;
   
   // Component state
-  const [cupPlaced, setCupPlaced] = useState(false);
+  const [cupLocation, setCupLocation] = useState<'stack' | 'machine' | 'counter' | null>(null);
   const [brewing, setBrewing] = useState(false);
   const [coffeeLevel, setCoffeeLevel] = useState(0);
   const [overflowed, setOverflowed] = useState(false);
   const [milkAdded, setMilkAdded] = useState(false);
-  const [brewingFrame, setBrewingFrame] = useState<'idle' | 'brewing1' | 'brewing2' | 'brewing3' | 'end'>('idle');
-  const [cupOnCounter, setCupOnCounter] = useState(false)
+  const [pouringMilk, setPouringMilk] = useState(false);
+  const [brewingFrame, setBrewingFrame] = useState<'idle' | 'start' | 'brewing1' | 'brewing2' | 'brewing3' | 'end'>('idle');
 
   // Start brewing coffee
   const handleStartBrewing = () => {
-    if (cupPlaced && !brewing && !beansNeedRefill && !overflowed) {
+    if (cupLocation === 'machine' && !brewing && !beansNeedRefill && !overflowed) {
       setBrewing(true);
     }
   };
@@ -54,7 +56,13 @@ const CoffeeMaker = ({
   // Add milk
   const handleAddMilk = () => {
     if (coffeeLevel > 0 && coffeeLevel <= 100 && !overflowed) {
-      setMilkAdded(true);
+      setPouringMilk(true);
+      
+      // Animate pouring for 2 seconds
+      setTimeout(() => {
+        setPouringMilk(false);
+        setMilkAdded(true);
+      }, 2000);
     }
   };
 
@@ -91,12 +99,13 @@ const CoffeeMaker = ({
   // Animate brewing states
   useEffect(() => {
     if (brewing) {
-      setBrewingFrame('brewing1');
+      setBrewingFrame('start');
       
       const timeline = [
+        { frame: 'start', delay: 500 },
         { frame: 'brewing1', delay: 1000 },
         { frame: 'brewing2', delay: 1000 },
-        { frame: 'brewing3', delay: 2000 },
+        { frame: 'brewing3', delay: 1000 },
         { frame: 'end', delay: 500 }
       ];
       
@@ -143,17 +152,21 @@ const CoffeeMaker = ({
         </p>
       )}
 
-      {/* Main Layout */}
+      {/* Main Layout - ABSOLUTE POSITIONING */}
       <div style={{ 
-        display: 'flex', 
-        gap: '80px', 
-        alignItems: 'flex-start',
-        width: '100%',
-        justifyContent: 'center'
+        position: 'relative',
+        width: `${layouts.makingScene.container.width}px`,
+        height: `${layouts.makingScene.container.height}px`,
+        margin: '0 auto'
       }}>
         
         {/* LEFT: Cup Stack */}
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ 
+          position: 'absolute',
+          left: `${layout.cupStack.x}px`,
+          top: `${layout.cupStack.y}px`,
+          textAlign: 'center' 
+        }}>
           <p style={{ marginBottom: '10px', fontWeight: 'bold' }}>Cup Stack</p>
           <DraggableImage
             src={assets.objects.cup.stack || assets.objects.cup.empty}
@@ -161,7 +174,7 @@ const CoffeeMaker = ({
             alt="Cup Stack"
             dragData={{ type: 'cup' }}
             style={{ 
-              width: '280px', 
+              width: `${layout.cupStack.width}px`,
               cursor: 'grab',
               filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))'
             }}
@@ -172,7 +185,12 @@ const CoffeeMaker = ({
         </div>
 
         {/* CENTER: Coffee Machine & Drop Zone */}
-        <div style={{ textAlign: 'center', position: 'relative' }}>
+        <div style={{ 
+          position: 'absolute',
+          left: `${layout.coffeeMachine.x}px`,
+          top: `${layout.coffeeMachine.y}px`,
+          textAlign: 'center'
+        }}>
           <p style={{ marginBottom: '10px', fontWeight: 'bold' }}>Coffee Machine</p>
           
           {/* Coffee Machine */}
@@ -187,9 +205,9 @@ const CoffeeMaker = ({
             alt="Coffee Machine"
             onClick={handleStartBrewing}
             style={{
-              width: '400px',
-              cursor: !cupPlaced || brewing || beansNeedRefill || overflowed ? 'not-allowed' : 'pointer',
-              opacity: !cupPlaced || beansNeedRefill ? 0.5 : 1,
+              width: `${layout.coffeeMachine.width}px`,
+              cursor: cupLocation !== 'machine' || brewing || beansNeedRefill || overflowed ? 'not-allowed' : 'pointer',
+              opacity: cupLocation !== 'machine' || beansNeedRefill ? 0.5 : 1,
               borderRadius: '10px',
               transition: 'opacity 0.3s',
               filter: brewing ? 'drop-shadow(0 0 15px rgba(255, 140, 0, 0.6))' : 'none',
@@ -216,64 +234,75 @@ const CoffeeMaker = ({
             </button>
           )}
 
-      {/* Drop Zone for Cup - POSITIONED ON TOP */}
-      <div style={{ 
-        position: 'absolute',
-        top: '175px',        // Adjust this to move up/down
-        left: '50%',
-        transform: 'translateX(-50%)',
-        zIndex: 10
-      }}>
-        <DropZone
-          onDrop={(data) => {
-            if (data.type === 'cup' && !cupPlaced) {
-              setCupPlaced(true);
-            }
-          }}
-          accepts={['cup']}
-          style={{
-            width: '100px',    // Smaller drop zone
-            height: '130px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderWidth: cupPlaced ? '0' : '2px',
-            borderStyle: cupPlaced ? 'none' : 'dashed',
-            borderColor: cupPlaced ? 'transparent' : '#4c77af',
-            borderRadius: '10px',
-            backgroundColor: cupPlaced ? 'transparent' : 'rgba(76, 119, 175, 0.1)',
-            transition: 'all 0.3s'
-          }}
-          highlightStyle={{
-            backgroundColor: 'rgba(76, 119, 175, 0.3)',
-            borderColor: '#4c77af',
-            borderStyle: 'solid',
-            borderWidth: '3px'
-          }}
-        >
-          {cupPlaced ? (
-            <div style={{ textAlign: 'center' }}>
-              <DraggableImage
-                src={
-                  overflowed ? assets.objects.cup.overflow :
-                  coffeeLevel >= 90 ? assets.objects.cup.coffee_full :
-                  assets.objects.cup.empty
+          {/* Drop Zone for Cup - positioned relative to machine */}
+          <div style={{ 
+            position: 'absolute',
+            top: `${layout.coffeeMachine.dropZone.top}px`,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 10
+          }}>
+            <DropZone
+              onDrop={(data) => {
+                if (data.type === 'cup' || data.type === 'filled-cup') {
+                  setCupLocation('machine');
                 }
-                alt="Coffee Cup"
-                dragData={{ type: 'filled-cup' }}
-                style={{ 
-                  width: '80px',
-                  height: '80px',
-                  filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
-                  cursor: 'grab'
-                }}
-              />
+              }}
+              accepts={['cup', 'filled-cup']}
+              style={{
+                width: `${layout.coffeeMachine.dropZone.width}px`,
+                height: `${layout.coffeeMachine.dropZone.height}px`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderWidth: cupLocation === 'machine' ? '0' : '2px',
+                borderStyle: cupLocation === 'machine' ? 'none' : 'dashed',
+                borderColor: cupLocation === 'machine' ? 'transparent' : '#4c77af',
+                borderRadius: '10px',
+                backgroundColor: cupLocation === 'machine' ? 'transparent' : 'rgba(76, 119, 175, 0.1)',
+                transition: 'all 0.3s'
+              }}
+              highlightStyle={{
+                backgroundColor: 'rgba(76, 119, 175, 0.3)',
+                borderColor: '#4c77af',
+                borderStyle: 'solid',
+                borderWidth: '3px'
+              }}
+            >
+              {cupLocation === 'machine' ? (
+                <DraggableImage
+                  src={
+                    overflowed ? assets.objects.cup.overflow :
+                    coffeeLevel >= 90 ? assets.objects.cup.coffee_full :
+                    assets.objects.cup.empty
+                  }
+                  alt="Coffee Cup"
+                  dragData={{ type: 'filled-cup' }}
+                  style={{ 
+                    width: `${layout.coffeeMachine.cupOnMachine.width}px`,
+                    filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
+                    cursor: 'grab'
+                  }}
+                />
+              ) : (
+                <span style={{ color: '#4c77af', textAlign: 'center', fontSize: '12px' }}>
+                  ☕<br/>
+                  <small>Drop here</small>
+                </span>
+              )}
               
               {/* Progress Bar */}
-              {coffeeLevel > 0 && (
-                <div style={{ marginTop: '5px' }}>
+              {cupLocation === 'machine' && coffeeLevel > 0 && (
+                <div style={{ 
+                  position: 'absolute',
+                  bottom: '-25px',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  width: '80px'
+                }}>
                   <div style={{
-                    width: '80px',
+                    width: '100%',
+                    height: '10px',
                     backgroundColor: '#ddd',
                     borderRadius: '5px',
                     overflow: 'hidden'
@@ -290,19 +319,17 @@ const CoffeeMaker = ({
                   </p>
                 </div>
               )}
-            </div>
-          ) : (
-            <span style={{ color: '#4c77af', textAlign: 'center', fontSize: '12px' }}>
-              ☕<br/>
-              <small>Drop here</small>
-            </span>
-          )}
-        </DropZone>
-      </div>
-    </div>
+            </DropZone>
+          </div>
+        </div>
 
         {/* RIGHT: Beans Jar */}
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ 
+          position: 'absolute',
+          left: `${layout.beansJar.x}px`,
+          top: `${layout.beansJar.y}px`,
+          textAlign: 'center' 
+        }}>
           <p style={{ marginBottom: '10px', fontWeight: 'bold' }}>Coffee Beans</p>
           <img
             src={
@@ -313,7 +340,7 @@ const CoffeeMaker = ({
             alt="Coffee Beans"
             onClick={() => beansNeedRefill && onBeansRefilled()}
             style={{
-              width: '120px',
+              width: `${layout.beansJar.width}px`,
               cursor: beansNeedRefill ? 'pointer' : 'default',
               opacity: beansNeedRefill ? 1 : 0.7,
               border: beansNeedRefill ? '3px solid orange' : '3px solid transparent',
@@ -333,152 +360,154 @@ const CoffeeMaker = ({
             </p>
           )}
         </div>
-      </div>
 
-    {/* COUNTER AREA - For adding milk and toppings */}
-    {cupPlaced && !cupOnCounter && coffeeLevel > 0 && (
-      <div style={{ 
-        marginTop: '30px',
-        padding: '20px',
-        backgroundColor: 'rgba(139, 69, 19, 0.1)',
-        borderRadius: '15px',
-        border: '2px dashed #8b4513'
-      }}>
-        <p style={{ fontWeight: 'bold', marginBottom: '10px', textAlign: 'center' }}>
-          Counter - Drag cup here to add milk & toppings
-        </p>
-        <DropZone
-          onDrop={(data) => {
-            if (data.type === 'filled-cup' && coffeeLevel > 0) {
-              setCupOnCounter(true);
-            }
-          }}
-          accepts={['filled-cup']}
-          style={{
-            width: '200px',
-            height: '150px',
-            margin: '0 auto',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderWidth: '3px',
-            borderStyle: 'dashed',
-            borderColor: '#8b4513',
-            borderRadius: '10px',
-            backgroundColor: 'rgba(139, 69, 19, 0.05)',
-            transition: 'all 0.3s'
-          }}
-          highlightStyle={{
-            backgroundColor: 'rgba(139, 69, 19, 0.2)',
-            borderColor: '#8b4513',
-            borderStyle: 'solid',
-            borderWidth: '3px'
-          }}
-        >
-          <span style={{ color: '#8b4513', textAlign: 'center' }}>
-            🪵<br/>
-            <small>Place cup on counter</small>
-          </span>
-        </DropZone>
-      </div>
-    )}
-
-    {/* CUP ON COUNTER - Show with milk & topping options */}
-    {cupOnCounter && (
-      <div style={{
-        marginTop: '20px',
-        padding: '30px',
-        backgroundColor: 'rgba(139, 69, 19, 0.15)',
-        borderRadius: '15px',
-        border: '3px solid #8b4513',
-        textAlign: 'center'
-      }}>
-        <h3 style={{ marginBottom: '20px' }}>☕ Cup on Counter</h3>
-        
-        {/* Cup Display */}
-        <div style={{ marginBottom: '20px' }}>
-          <img
-            src={
-              overflowed ? assets.objects.cup.overflow :
-              coffeeLevel >= 90 ? assets.objects.cup.coffee_full :
-              assets.objects.cup.empty
-            }
-            alt="Coffee Cup on Counter"
-            style={{ 
-              width: '120px',
-              filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))'
+        {/* Milk Container */}
+        <div style={{ 
+          position: 'absolute',
+          left: `${layout.counter.milk.x}px`,
+          top: `${layout.counter.milk.y}px`,
+          textAlign: 'center' 
+        }}>
+          <p style={{ marginBottom: '10px', fontWeight: 'bold' }}>Milk</p>
+          <DraggableImage
+            src={assets.objects.milk.container}
+            draggingSrc={assets.objects.milk.pouring}
+            alt="Milk Container"
+            dragData={{ type: 'milk' }}
+            style={{
+              width: `${layout.counter.milk.width}px`,
+              cursor: milkAdded ? 'not-allowed' : 'grab',
+              filter: milkAdded ? 'grayscale(100%) opacity(0.5)' : 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))'
             }}
           />
-          
-          {/* Progress Bar */}
-          <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'center' }}>
-            <div>
-              <div style={{
-                width: '120px',
-                height: '15px',
-                backgroundColor: '#ddd',
-                borderRadius: '8px',
-                overflow: 'hidden'
-              }}>
-                <div style={{
-                  width: `${Math.min(coffeeLevel, 100)}%`,
-                  height: '100%',
-                  backgroundColor: coffeeLevel > 100 ? '#e74c3c' : '#6b4423',
-                  transition: 'width 0.3s'
-                }} />
-              </div>
-              <p style={{ margin: '5px 0', fontSize: '12px', fontWeight: 'bold' }}>
-                Coffee: {coffeeLevel}%
-              </p>
-            </div>
-          </div>
+          <p style={{ fontSize: '12px', color: '#666', marginTop: '5px' }}>
+            {milkAdded ? '✓ Milk added' : 'Drag to cup'}
+          </p>
         </div>
 
-        {/* Put cup back button */}
-        <button
-          onClick={() => setCupOnCounter(false)}
-          style={{
-            padding: '10px 20px',
-            fontSize: '14px',
-            backgroundColor: '#95a5a6',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-            marginBottom: '20px'
-          }}
-        >
-          ← Put Cup Back Under Machine
-        </button>
-      </div>
-    )}
-
-
-      {/* Add Milk Button */}
-      {cupOnCounter && !overflowed && !milkAdded && (
-        <button 
-          onClick={handleAddMilk}
-          style={{
-            padding: '15px 35px',
-            fontSize: '18px',
-            cursor: 'pointer',
-            backgroundColor: '#3498db',
-            color: 'white',
-            border: 'none',
-            borderRadius: '8px',
-            fontWeight: 'bold',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-            transition: 'all 0.2s'
-          }}
-          onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-          onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
-        >
-          Add Milk 🥛
-        </button>
-      )}
+        {/* Counter - positioned absolutely */}
+        <div style={{ 
+          position: 'absolute',
+          left: `${layout.counter.x}px`,
+          top: `${layout.counter.y}px`,
+          padding: '20px',
+          backgroundColor: 'rgba(139, 69, 19, 0.1)',
+          borderRadius: '15px',
+          border: '2px solid #8b4513',
+          width: '100%',
+          maxWidth: `${layout.counter.maxWidth}px`
+        }}>
+          <p style={{ fontWeight: 'bold', marginBottom: '15px', textAlign: 'center' }}>
+            🪵 Counter - Place cup here to add milk & toppings
+          </p>
+          
+          <DropZone
+            onDrop={(data) => {
+              if ((data.type === 'cup' || data.type === 'filled-cup') && coffeeLevel > 0) {
+                setCupLocation('counter');
+              }
+              // Handle milk drop
+              if (data.type === 'milk' && cupLocation === 'counter' && !milkAdded) {
+                handleAddMilk();
+              }
+            }}
+            accepts={['cup', 'filled-cup', 'milk']}
+            style={{
+              width: `${layout.counter.dropZone.width}px`,
+              height: `${layout.counter.dropZone.height}px`,
+              margin: '0 auto',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderWidth: '3px',
+              borderStyle: 'dashed',
+              borderColor: cupLocation === 'counter' ? '#27ae60' : '#8b4513',
+              borderRadius: '10px',
+              backgroundColor: cupLocation === 'counter' ? 'rgba(39, 174, 96, 0.1)' : 'rgba(139, 69, 19, 0.05)',
+              transition: 'all 0.3s',
+              position: 'relative'
+            }}
+            highlightStyle={{
+              backgroundColor: 'rgba(139, 69, 19, 0.2)',
+              borderColor: '#8b4513',
+              borderStyle: 'solid',
+              borderWidth: '3px'
+            }}
+          >
+            {cupLocation === 'counter' ? (
+              <>
+                <DraggableImage
+                  src={
+                    overflowed ? assets.objects.cup.overflow :
+                    coffeeLevel >= 90 ? assets.objects.cup.coffee_full :
+                    assets.objects.cup.empty
+                  }
+                  alt="Coffee Cup on Counter"
+                  dragData={{ type: 'filled-cup' }}
+                  style={{ 
+                    width: `${layout.counter.cupOnCounter.width}px`,
+                    filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))',
+                    cursor: 'grab'
+                  }}
+                />
+                
+                {/* Pouring Milk Animation Overlay */}
+                {pouringMilk && (
+                  <img
+                    src={assets.objects.milk.pouring}
+                    alt="Pouring Milk"
+                    style={{
+                      position: 'absolute',
+                      top: '-270px', //above cup
+                      left: '30%', // centered horizontally
+                      transform: 'translateX(-50%)',
+                      width: '400px',
+                      zIndex: 20,
+                      pointerEvents: 'none',
+                      animation: 'pour 2s ease-in-out' 
+                    }}
+                  />
+                )}
+                
+                {/* Progress Bar */}
+                {coffeeLevel > 0 && (
+                  <div style={{ marginTop: '10px', width: `${layout.counter.cupOnCounter.width}px` }}>
+                    <div style={{
+                      width: '100%',
+                      height: '15px',
+                      backgroundColor: '#ddd',
+                      borderRadius: '8px',
+                      overflow: 'hidden'
+                    }}>
+                      <div style={{
+                        width: `${Math.min(coffeeLevel, 100)}%`,
+                        height: '100%',
+                        backgroundColor: coffeeLevel > 100 ? '#e74c3c' : '#6b4423',
+                        transition: 'width 0.3s'
+                      }} />
+                    </div>
+                    <p style={{ margin: '5px 0', fontSize: '12px', fontWeight: 'bold' }}>
+                      {coffeeLevel}%
+                    </p>
+                  </div>
+                )}
+              </>
+            ) : (
+              <span style={{ color: '#8b4513', textAlign: 'center' }}>
+                {coffeeLevel > 0 ? (
+                  <>☕<br/><small>Drag filled cup here</small></>
+                ) : (
+                  <>🪵<br/><small>Counter (brew coffee first)</small></>
+                )}
+              </span>
+            )}
+          </DropZone>
+        </div>
+      </div> {/* END OF MAIN LAYOUT DIV */}
 
       {/* Mocha Option */}
-      {milkAdded && onSwitchToHotChocolate && (
+      {milkAdded && cupLocation === 'counter' && onSwitchToHotChocolate && (
         <button 
           onClick={onSwitchToHotChocolate}
           style={{
