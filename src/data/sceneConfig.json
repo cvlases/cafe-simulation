@@ -28,7 +28,7 @@
       "coffeeButton": {
         "x": 100,
         "y": 300,
-        "width": 150,
+        "width": 50,
         "height": 80
       },
       "hotChocolateButton": {

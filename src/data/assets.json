@@ -21,8 +21,11 @@
       "stack": "../src/assets/objects/cup_stack.png"
     },
     "coffeeMaker": {
-      "idle": "/assets/objects/coffee_maker_idle.png",
-      "brewing": "/assets/objects/coffee_maker_brewing.png"
+      "idle": "../src/assets/objects/coffee_maker_idle.png",
+      "brewing1": "../src/assets/objects/coffee_maker_brewing1.png",
+      "brewing2": "../src/assets/objects/coffee_maker_brewing2.png",
+      "brewing3": "../src/assets/objects/coffee_maker_brewing3.png",
+      "end": "../src/assets/objects/coffee_maker_end.png"
     },
     "beans": {
       "full": "../src/assets/objects/beans_jar_full.png",
