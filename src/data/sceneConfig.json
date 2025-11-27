@@ -3,20 +3,20 @@
     "background": "../src/assets/backgrounds/order_bg.jpg",
     "elements": {
       "customer": {
-        "x": 100,
-        "y": 300,
-        "width": 500,
+        "x": 300,
+        "y": 515,
+        "width": 200,
         "height": 500
       },
       "orderDisplay": {
         "x": 100,
         "y": 150,
-        "width": 250,
+        "width": 550,
         "height": 150
       },
       "startButton": {
-        "x": 500,
-        "y": 400,
+        "x": 750,
+        "y": 720,
         "width": 150,
         "height": 60
       }

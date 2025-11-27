@@ -39,7 +39,7 @@ const CoffeeMaker = ({
   const [overflowed, setOverflowed] = useState(false);
   const [milkAdded, setMilkAdded] = useState(false);
   const [pouringMilk, setPouringMilk] = useState(false);
-  const [brewingFrame, setBrewingFrame] = useState<'idle' | 'start' | 'brewing1' | 'brewing2' | 'brewing3' | 'end'>('idle');
+  const [brewingFrame, setBrewingFrame] = useState<'idle' | 'brewing1' | 'brewing2' | 'brewing3' | 'end'>('idle');
 
   // Start brewing coffee
   const handleStartBrewing = () => {
@@ -99,14 +99,13 @@ const CoffeeMaker = ({
   // Animate brewing states
   useEffect(() => {
     if (brewing) {
-      setBrewingFrame('start');
+      setBrewingFrame('brewing1');
       
       const timeline = [
-        { frame: 'start', delay: 500 },
-        { frame: 'brewing1', delay: 1000 },
-        { frame: 'brewing2', delay: 1000 },
-        { frame: 'brewing3', delay: 1000 },
-        { frame: 'end', delay: 500 }
+        { frame: 'brewing1', delay: 500 },
+        { frame: 'brewing2', delay: 1500 },
+        { frame: 'brewing3', delay: 2000 },
+        { frame: 'end', delay: 1000 }
       ];
       
       const timeouts: number[] = [];
@@ -152,7 +151,7 @@ const CoffeeMaker = ({
         </p>
       )}
 
-      {/* Main Layout - ABSOLUTE POSITIONING */}
+      {/* Main Layout */}
       <div style={{ 
         position: 'relative',
         width: `${layouts.makingScene.container.width}px`,
@@ -459,10 +458,10 @@ const CoffeeMaker = ({
                     alt="Pouring Milk"
                     style={{
                       position: 'absolute',
-                      top: '-270px', //above cup
-                      left: '30%', // centered horizontally
+                      top: '-120px', //above cup
+                      left: '10%', // centered horizontally
                       transform: 'translateX(-50%)',
-                      width: '400px',
+                      width: '150px',
                       zIndex: 20,
                       pointerEvents: 'none',
                       animation: 'pour 2s ease-in-out' 

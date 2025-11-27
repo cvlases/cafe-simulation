@@ -18,7 +18,11 @@
       "empty": "../src/assets/objects/cup_empty.png",
       "coffee_full": "../src/assets/objects/cup_coffee_full.png",
       "overflow": "../src/assets/objects/cup_overflow.png",
-      "stack": "../src/assets/objects/cup_stack.png"
+      "stack": "../src/assets/objects/cup_stack.png",
+      "milk_filled": "../src/assets/objects/cup_milk_filled.png",
+      "hot_chocolate_done": "../src/assets/objects/cup_hot_chocolate_done.png",
+      "coffee_done": "../src/assets/objects/cup_coffee_done.png",
+      "mocha_done": "../src/assets/objects/cup_mocha_done.png"
     },
     "coffeeMaker": {
       "idle": "../src/assets/objects/coffee_maker_idle.png",
@@ -37,15 +41,41 @@
       "pouring": "../src/assets/objects/milk_pouring.png"
     },
     "kettle": {
-      "empty": "/assets/objects/kettle_empty.png",
-      "full": "/assets/objects/kettle_full.png",
-      "heating": "/assets/objects/kettle_heating.png"
+      "regular": "../src/assets/objects/kettle_regular.png",
+      "hot": "../src/assets/objects/kettle_hot.png",
+      "pouring": "../src/assets/objects/kettle_pouring.png"
     },
     "stove": {
-      "off": "/assets/objects/stove_off.png",
-      "on": "/assets/objects/stove_on.png",
-      "fire": "/assets/objects/stove_fire.png"
+      "off": "../src/assets/objects/stove_off.png",
+      "on": "../src/assets/objects/stove_on.png",
+      "fire": "../src/assets/objects/stove_fire.png"
     },
+    "chocolate": {
+      "bowl": "../src/assets/objects/chocolate_bowl.png",
+      "spoon_empty": "../src/assets/objects/chocolate_empty_spoon.png",
+      "spoon_full": "../src/assets/objects/chocolate_full_spoon.png"
+    },
+    "spoon": {
+      "empty": "../src/assets/objects/chocolate_empty_spoon.png",
+      "full": "../src/assets/objects/chocolate_full_spoon.png",
+      "stirring": "../src/assets/objects/spoon_stirring.png"
+    },
+    "stirring": {
+      "coffee": {
+        "left": "../src/assets/objects/stir_coffee_left.png",
+        "center": "../src/assets/objects/stir_coffee_center.png",
+        "right": "../src/assets/objects/stir_coffee_right.png"
+      },
+      "hotChocolate": {
+        "left": "../src/assets/objects/stir_hotchocolate_left.png",
+        "center": "../src/assets/objects/stir_hotchocolate_center.png",
+        "right": "../src/assets/objects/stir_hotchocolate_right.png"
+      },
+      "mocha": {
+        "left": "../src/assets/objects/stir_mocha_left.png",
+        "center": "../src/assets/objects/stir_mocha_center.png",
+        "right": "../src/assets/objects/stir_mocha_right.png"
+      },
     "toppings": {
       "whippedCream": "/assets/objects/whipped_cream.png",
       "marshmallows": "/assets/objects/marshmallows.png",
@@ -64,4 +94,5 @@
       "/assets/animations/pour_03.png"
     ]
   }
+}
 }
