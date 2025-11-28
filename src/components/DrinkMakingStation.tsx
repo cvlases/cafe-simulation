@@ -6,6 +6,7 @@ import DropZone from './DropZone';
 
 interface DrinkMakingStationProps {
   onComplete: () => void;
+  onSkipToppings?: () => void;
   onCancel: () => void;
   beansNeedRefill: boolean;
   onBeansRefilled: () => void;
@@ -22,6 +23,7 @@ interface DrinkMakingStationProps {
 
 const DrinkMakingStation = ({ 
   onComplete, 
+  onSkipToppings,
   onCancel,
   beansNeedRefill,
   onBeansRefilled,
@@ -42,6 +44,9 @@ const DrinkMakingStation = ({
   const [coffeeLevel, setCoffeeLevel] = useState(0);
   const [brewingFrame, setBrewingFrame] = useState<'idle' | 'brewing1' | 'brewing2' | 'brewing3' | 'end'>('idle');
   
+  // button states
+  const [forwardButtonPressed, setForwardButtonPressed] = useState(false);
+ 
   // Hot chocolate states
   const [kettleLocation, setKettleLocation] = useState<'counter' | 'stove' | null>('counter');
   const [kettleState, setKettleState] = useState<'regular' | 'hot' | 'pouring'>('regular');
@@ -53,7 +58,8 @@ const DrinkMakingStation = ({
   const [pouringHotMilk, setPouringHotMilk] = useState(false);
   const [readyToPour, setReadyToPour] = useState(false); 
   const [isPouring, setIsPouring] = useState(false);
-  
+  const [trashHover, setTrashHover] = useState(false);
+
   // Chocolate & Spoon states
   const [spoonState, setSpoonState] = useState<'empty' | 'full'>('empty');
   const [chocolateAdded, setChocolateAdded] = useState(false);
@@ -526,7 +532,7 @@ useEffect(() => {
             <button 
               onClick={handleStopBrewing} 
               style={{ 
-                marginTop: '10px',
+                marginTop: '-10px',
                 padding: '8px 16px',
                 backgroundColor: '#e74c3c',
                 color: 'white',
@@ -953,6 +959,57 @@ useEffect(() => {
             {spoonState === 'full' ? 'To cup' : 'To bowl'}
           </p>
         </div>
+
+        {/* Trash Can - INSIDE the main layout div */}
+  <div style={{
+    position: 'absolute',
+    left: `${layout.trash.x}px`,
+    top: `${layout.trash.y}px`,
+    textAlign: 'center'
+  }}>
+    <DropZone
+      onDrop={(data) => {
+        if (data.type === 'cup-to-trash' || data.type === 'filled-cup') {
+          console.log("Cup thrown in trash - restarting!");
+          setCupLocation(null);
+          setTimeout(() => {
+            onCancel();
+          }, 300);
+        }
+      }}
+      onDragEnter={() => setTrashHover(true)}
+      onDragLeave={() => setTrashHover(false)}
+      accepts={['cup-to-trash', 'filled-cup']}
+      style={{
+        width: `${layout.trash.width}px`,
+        height: `${layout.trash.width}px`,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: '10px',
+        transition: 'all 0.3s'
+      }}
+      highlightStyle={{
+        backgroundColor: 'rgba(231, 76, 60, 0.2)',
+        transform: 'scale(1.1)'
+      }}
+    >
+      <img
+        src={assets.objects.trash.empty}
+        alt="Trash"
+        style={{
+          width: '100%',
+          filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
+          transition: 'all 0.3s',
+          pointerEvents: 'none'
+        }}
+      />
+    </DropZone>
+    <p style={{ fontSize: '10px', color: '#666', marginTop: '5px' }}>
+      Drag cup here to restart
+    </p>
+  </div>
+
         
         {/* Cup Drop Zone - standalone, no box */}
         <div style={{
@@ -1056,9 +1113,9 @@ useEffect(() => {
                         // Default empty
                         return assets.objects.cup.empty;
                     })()}
-                    draggingSrc={assets.objects.cup.empty}
+                    // draggingSrc={assets.objects.cup.empty}
                     alt="Cup"
-                    dragData={{ type: 'filled-cup' }}
+                    dragData={{ type: 'cup-to-trash' }}
                     style={{ 
                         width: `${layout.cupOnCounter.width}px`,
                         filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))',
@@ -1283,41 +1340,64 @@ useEffect(() => {
         </button>
       )}
 
-      {/* Done Button - User decides when finished */}
-<button 
-  onClick={handleComplete}
-  disabled={overflowed || stoveState === 'fire' || totalLiquidLevel === 0}
-  style={{
-    padding: '20px 50px',
-    fontSize: '20px',
-    backgroundColor: overflowed || stoveState === 'fire' || totalLiquidLevel === 0 ? '#ccc' : '#27ae60',
-    color: 'white',
-    border: 'none',
-    borderRadius: '10px',
-    cursor: overflowed || stoveState === 'fire' || totalLiquidLevel === 0 ? 'not-allowed' : 'pointer',
-    fontWeight: 'bold',
-    boxShadow: overflowed || stoveState === 'fire' || totalLiquidLevel === 0 ? 'none' : '0 6px 10px rgba(0,0,0,0.2)'
-  }}
->
-  Done Making! →
-</button>
       
-      <button 
-        onClick={onCancel}
-        style={{
-          padding: '12px 30px',
-          fontSize: '16px',
-          backgroundColor: '#95a5a6',
-          color: 'white',
-          border: 'none',
-          borderRadius: '8px',
-          cursor: 'pointer',
-          fontWeight: 'bold'
-        }}
-      >
-        Cancel / Start Over
-      </button>
+
+     {/* Action Buttons - TEST: Always show */}
+<div style={{
+  position: 'absolute',
+  bottom: '40px',
+  left: '   50%',
+
+  zIndex: 9999
+}}>      
+
+{/* Done Button - Forward to Toppings */}
+{getDrinkType() && (
+  <img
+    src={forwardButtonPressed ? assets.ui.buttons.forward.pressed : assets.ui.buttons.forward.normal}
+    alt="Add Toppings"
+    onMouseDown={() => !overflowed && stoveState !== 'fire' && setForwardButtonPressed(true)}
+    onMouseUp={() => {
+      setForwardButtonPressed(false);
+      if (!overflowed && stoveState !== 'fire') {
+        handleComplete();
+      }
+    }}
+    onMouseLeave={() => setForwardButtonPressed(false)}
+    onTouchStart={() => !overflowed && stoveState !== 'fire' && setForwardButtonPressed(true)}
+    onTouchEnd={() => {
+      setForwardButtonPressed(false);
+      if (!overflowed && stoveState !== 'fire') {
+        handleComplete();
+      }
+    }}
+    style={{
+          position: 'absolute',
+          left: `${layout.buttons.forward.x}px`,
+          top: `${layout.buttons.forward.y}px`,
+      transform: 'translateX(-50%)',
+      width: '200px',
+      cursor: overflowed || stoveState === 'fire' ? 'not-allowed' : 'pointer',
+      transition: 'transform 0.1s',
+    //   transform: forwardButtonPressed && !overflowed && stoveState !== 'fire' ? 
+    //              'translateX(-50%) scale(0.95)' : 'translateX(-50%) scale(1)',
+      opacity: overflowed || stoveState === 'fire' ? 0.5 : 1,
+      userSelect: 'none',
+      pointerEvents: overflowed || stoveState === 'fire' ? 'none' : 'auto',
+      zIndex: 9999
+    }}
+  />
+)}
+
+
+
+
+</div> 
+
+      
     </div>
+
+
   );
 };
 

@@ -24,8 +24,8 @@ const Scorecard = ({ score, customerName, earnings, onContinue }: ScorecardProps
       top: '50%',
       left: '50%',
       transform: 'translate(-50%, -50%)',
-      backgroundColor: 'black',
-      padding: '40px',
+      backgroundColor: '#449086ff',
+      padding: '20px',
       borderRadius: '15px',
       boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
       textAlign: 'center',
@@ -33,7 +33,7 @@ const Scorecard = ({ score, customerName, earnings, onContinue }: ScorecardProps
     }}>
       <h2>{customerName}'s Review</h2>
       
-      <div style={{ fontSize: '48px', margin: '20px 0' }}>
+      <div style={{ fontSize: '18px', margin: '10px 0' }}>
         {score}%
       </div>
       
@@ -44,7 +44,7 @@ const Scorecard = ({ score, customerName, earnings, onContinue }: ScorecardProps
       <div style={{
         margin: '20px 0',
         padding: '15px',
-        backgroundColor: '#363434ff',
+        backgroundColor: '#82f7ffff',
         borderRadius: '10px'
       }}>
         {earnings.refunded ? (
@@ -71,7 +71,7 @@ const Scorecard = ({ score, customerName, earnings, onContinue }: ScorecardProps
         style={{
           padding: '15px 30px',
           fontSize: '18px',
-          backgroundColor: '#4c77afff',
+          backgroundColor: '#21696cff',
           color: 'white',
           border: 'none',
           borderRadius: '5px',

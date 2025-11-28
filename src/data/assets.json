@@ -22,7 +22,15 @@
       "milk_filled": "../src/assets/objects/cup_milk_filled.png",
       "hot_chocolate_done": "../src/assets/objects/cup_hot_chocolate_done.png",
       "coffee_done": "../src/assets/objects/cup_coffee_done.png",
-      "mocha_done": "../src/assets/objects/cup_mocha_done.png"
+      "mocha_done": "../src/assets/objects/cup_mocha_done.png",
+      "with_whipped_cream": "../src/assets/objects/cup_with_whipped_cream.png",
+      "with_whipped_cream_marshmallows": "../src/assets/objects/cup_with_whipped_cream_marshmallows.png",
+      "with_whipped_cream_sprinkles": "../src/assets/objects/cup_with_whipped_cream_sprinkles.png",
+      "with_whipped_cream_marshmallows_sprinkles": "../src/assets/objects/cup_with_all_toppings.png",
+      "with_marshmallows": "../src/assets/objects/cup_with_marshmallows.png",
+      "with_sprinkles": "../src/assets/objects/cup_with_sprinkles.png",
+      "with_marshmallows_sprinkles": "../src/assets/objects/cup_with_marshmallows_sprinkles.png",
+      "trash": "../src/assets/objects/trash.png"
     },
     "coffeeMaker": {
       "idle": "../src/assets/objects/coffee_maker_idle.png",
@@ -55,6 +63,10 @@
       "spoon_empty": "../src/assets/objects/chocolate_empty_spoon.png",
       "spoon_full": "../src/assets/objects/chocolate_full_spoon.png"
     },
+    "trash": {
+      "empty": "../src/assets/objects/trash_empty.png",
+      "full": "../src/assets/objects/trash_full.png"
+    },
     "spoon": {
       "empty": "../src/assets/objects/chocolate_empty_spoon.png",
       "full": "../src/assets/objects/chocolate_full_spoon.png",
@@ -75,17 +87,40 @@
         "left": "../src/assets/objects/stir_mocha_left.png",
         "center": "../src/assets/objects/stir_mocha_center.png",
         "right": "../src/assets/objects/stir_mocha_right.png"
-      },
+      }
+    },
     "toppings": {
-      "whippedCream": "/assets/objects/whipped_cream.png",
-      "marshmallows": "/assets/objects/marshmallows.png",
-      "sprinkles": "/assets/objects/sprinkles.png"
+      "whippedCream": {
+        "canister": "../src/assets/objects/whipped_cream_canister.png",
+        "dispensing": "../src/assets/objects/whipped_cream_dispensing.png"
+      },
+      "marshmallows": {
+        "container": "../src/assets/objects/marshmallows_container.png",
+        "scooping": "../src/assets/objects/marshmallows_scooping.png",
+        "scoop": "../src/assets/objects/marshmallow_scoop.png"
+      },
+      "sprinkles": {
+        "jar": "../src/assets/objects/sprinkles_jar.png",
+        "shaking": "../src/assets/objects/sprinkles_shaking.png"
+      }
     }
   },
   "buttons": {
     "startMaking": "/assets/buttons/start_making.png",
     "serve": "/assets/buttons/serve.png",
     "clear": "/assets/buttons/clear.png"
+  },
+  "ui": {
+    "buttons": {
+      "forward": {
+        "normal": "../src/assets/ui/button_forward.png",
+        "pressed": "../src/assets/ui/button_forward_pressed.png"
+      },
+      "back": {
+        "normal": "../src/assets/ui/button_back.png",
+        "pressed": "../src/assets/ui/button_back_pressed.png"
+      }
+    }
   },
   "animations": {
     "pour": [
@@ -94,5 +129,4 @@
       "/assets/animations/pour_03.png"
     ]
   }
-}
 }

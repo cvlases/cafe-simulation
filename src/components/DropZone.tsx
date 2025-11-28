@@ -2,11 +2,13 @@ import { useState } from 'react';
 
 interface DropZoneProps {
   onDrop: (data: any) => void;
+  onDragEnter?: (data: any) => void; // ← ADD THIS
+  onDragLeave?: (data: any) => void; // ← ADD THIS
   children: React.ReactNode;
   style?: React.CSSProperties;
   className?: string;
-  highlightStyle?: React.CSSProperties; // Style when item is hovering over
-  accepts?: string[]; // What types of items this zone accepts
+  highlightStyle?: React.CSSProperties;
+  accepts?: string[];
 }
 
 /**
@@ -15,6 +17,8 @@ interface DropZoneProps {
  */
 const DropZone = ({
   onDrop,
+  onDragEnter, // ← ADD THIS
+  onDragLeave, // ← ADD THIS
   children,
   style = {},
   className = '',
@@ -22,14 +26,33 @@ const DropZone = ({
   accepts = [],
 }: DropZoneProps) => {
   const [isOver, setIsOver] = useState(false);
+  const [currentDragData, setCurrentDragData] = useState<any>(null); // ← ADD THIS to track drag data
 
   const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault(); // Required to allow dropping
+  e.preventDefault();
+  
+  // Call onDragEnter on first dragover (when not already over)
+  if (!isOver) {
     setIsOver(true);
-  };
-
+    
+    // Use a simple approach - just call onDragEnter without trying to parse data
+    // The ToppingStation will use the global currentlyDragging variable
+    if (onDragEnter) {
+      onDragEnter({ type: 'unknown' }); // Placeholder, real logic uses global state
+    }
+  }
+};
   const handleDragLeave = (e: React.DragEvent) => {
-    setIsOver(false);
+    // Make sure we're actually leaving the drop zone (not entering a child)
+    if (e.currentTarget === e.target || !e.currentTarget.contains(e.relatedTarget as Node)) {
+      setIsOver(false);
+      
+      // Call onDragLeave with the current drag data
+      if (onDragLeave && currentDragData) {
+        onDragLeave(currentDragData);
+      }
+      setCurrentDragData(null);
+    }
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -37,25 +60,25 @@ const DropZone = ({
     setIsOver(false);
 
     try {
-        const jsonData = e.dataTransfer.getData('application/json');
-        
-        // Check if we actually got data
-        if (!jsonData) {
+      const jsonData = e.dataTransfer.getData('application/json');
+      
+      if (!jsonData) {
         console.warn('No drag data received');
         return;
-        }
-        
-        const data = JSON.parse(jsonData);
-        
-        // Check if this zone accepts this type of item
-        if (accepts.length === 0 || accepts.includes(data.type)) {
+      }
+      
+      const data = JSON.parse(jsonData);
+      
+      // Check if this zone accepts this type of item
+      if (accepts.length === 0 || accepts.includes(data.type)) {
         onDrop(data);
-        }
+      }
     } catch (error) {
-        console.error('Error parsing drop data:', error);
-        // Don't break - just ignore bad drops
+      console.error('Error parsing drop data:', error);
     }
-    };
+    
+    setCurrentDragData(null);
+  };
 
   const dropZoneStyle: React.CSSProperties = {
     position: 'relative',

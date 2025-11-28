@@ -31,6 +31,10 @@ function App() {
   type Scene = "order" | "making";
   const [currentScene, setCurrentScene] = useState<Scene>("order");
 
+  // buttons
+  const [forwardButtonPressed, setForwardButtonPressed] = useState(false);
+  const [backButtonPressed, setBackButtonPressed] = useState(false);
+
   // Beans tracking
   const [coffeesUsed, setCoffeesUsed] = useState(0);
   const beansNeedRefill = coffeesUsed >= 3;
@@ -209,18 +213,32 @@ function App() {
             />
           </div>
           
-          <button 
-            onClick={() => setCurrentScene("making")}
-            style={{
-              position: 'absolute',
-              left: `${orderConfig.elements.startButton.x}px`,
-              top: `${orderConfig.elements.startButton.y}px`,
-              width: `${orderConfig.elements.startButton.width}px`,
-              height: `${orderConfig.elements.startButton.height}px`
-            }}
-          >
-            Start Making →
-          </button>
+          {/* Start Making Button */}
+<img
+  src={forwardButtonPressed ? assets.ui.buttons.forward.pressed : assets.ui.buttons.forward.normal}
+  alt="Start Making"
+  onMouseDown={() => setForwardButtonPressed(true)}
+  onMouseUp={() => {
+    setForwardButtonPressed(false);
+    setCurrentScene("making");
+  }}
+  onMouseLeave={() => setForwardButtonPressed(false)}
+  onTouchStart={() => setForwardButtonPressed(true)}
+  onTouchEnd={() => {
+    setForwardButtonPressed(false);
+    setCurrentScene("making");
+  }}
+  style={{
+    position: 'absolute',
+    left: `${orderConfig.elements.startButton.x}px`,
+    top: `${orderConfig.elements.startButton.y}px`,
+    width: `${orderConfig.elements.startButton.width}px`,
+    cursor: 'pointer',
+    transition: 'transform 0.1s',
+    transform: forwardButtonPressed ? 'scale(0.95)' : 'scale(1)',
+    userSelect: 'none'
+  }}
+/>
         </div>
       )}
       
@@ -239,142 +257,108 @@ function App() {
           }}
         >
           {/* Back button */}
-          <button 
-            onClick={() => setCurrentScene("order")}
-            style={{
-              position: 'absolute',
-              top: 20,
-              left: 20,
-              zIndex: 1000
-            }}
-          >
-            ← Back to Order
-          </button>
+<img
+  src={backButtonPressed ? assets.ui.buttons.back.pressed : assets.ui.buttons.back.normal}
+  alt="Back to Order"
+  onMouseDown={() => setBackButtonPressed(true)}
+  onMouseUp={() => {
+    setBackButtonPressed(false);
+    setCurrentScene("order");
+  }}
+  onMouseLeave={() => setBackButtonPressed(false)}
+  onTouchStart={() => setBackButtonPressed(true)}
+  onTouchEnd={() => {
+    setBackButtonPressed(false);
+    setCurrentScene("order");
+  }}
+  style={{
+    position: 'absolute',
+    top: 20,
+    left: 20,
+    width: '150px',
+    cursor: 'pointer',
+    transition: 'transform 0.1s',
+    transform: backButtonPressed ? 'scale(0.95)' : 'scale(1)',
+    userSelect: 'none',
+    zIndex: 1000
+  }}
+/>
   
-          {showToppingStation ? (
-            // Show topping station
-            <ToppingStation 
-              currentToppings={currentToppings}
-              onAddTopping={(topping) => {
-                setCurrentToppings([...currentToppings, topping]);
-              }}
-              onComplete={(metrics) => {
-                // Save topping metrics
-                setDrinkMetrics({
-                  ...drinkMetrics,
-                  whippedCreamFirst: metrics.whippedCreamFirst,
-                  whippedCreamDuration: metrics.whippedCreamDuration
-                });
+         {showToppingStation ? (
+  // Show topping station
+  <ToppingStation 
+    currentToppings={currentToppings}
+    onAddTopping={(topping) => {
+      setCurrentToppings([...currentToppings, topping]);
+    }}
+    onComplete={(metrics) => {
+      // Save topping metrics
+      setDrinkMetrics({
+        ...drinkMetrics,
+        whippedCreamFirst: metrics.whippedCreamFirst,
+        whippedCreamDuration: metrics.whippedCreamDuration
+      });
 
-                // Add toppings to drink
-                setCurrentDrink({
-                  ...currentDrink,
-                  extras: currentToppings
-                });
-                setShowToppingStation(false);
-              }}
-              onCancel={() => {
-                // Clear everything
-                handleClear();
-              }}
-            />
-          ) : (
-
-          <DrinkMakingStation
-            onComplete={() => {
-              setShowToppingStation(true);
-            }}
-            onCancel={() => {
-              handleClear();
-            }}
-            beansNeedRefill={beansNeedRefill}
-            onBeansRefilled={() => setCoffeesUsed(0)}
-            coffeesUsed={coffeesUsed}
-            onDrinkMade={(drinkData) => {
-              console.log("Drink made:", drinkData);
-              
-              // Update drink
-              setCurrentDrink({
-                base: drinkData.bases,
-                extras: []
-              });
-              
-              // Save metrics
-              setDrinkMetrics({
-                coffeeLevel: drinkData.coffeeLevel,
-                milkLevel: drinkData.milkLevel,
-                hotChocolateTemp: drinkData.temperature,
-                stirringDuration: drinkData.stirringDuration,
-                overflowed: drinkData.overflowed
-              });
-              
-              // Update coffee counter if coffee was used
-              if (drinkData.bases.includes('coffee')) {
-                setCoffeesUsed(coffeesUsed + 1);
-              }
-            }}
-          />
-          )}
-
-          {/* Show serve/clear buttons when drink is ready */}
-          {!showToppingStation && currentDrink && currentDrink.base.length > 0 && (
-            <div style={{
-              position: 'absolute',
-              bottom: '20px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              display: 'flex',
-              gap: '20px',
-              zIndex: 1000,
-              flexDirection: 'column',
-              alignItems: 'center'
-            }}>
-              <p style={{ 
-                backgroundColor: 'white', 
-                padding: '10px 20px', 
-                borderRadius: '8px',
-                fontWeight: 'bold',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-              }}>
-                Current drink: {currentDrink.base.join(" + ")} 
-                {currentDrink.extras.length > 0 && ` with ${currentDrink.extras.join(", ")}`}
-              </p>
-              <div style={{ display: 'flex', gap: '20px' }}>
-                <button 
-                  onClick={handleServe}
-                  style={{
-                    padding: '15px 40px',
-                    fontSize: '18px',
-                    backgroundColor: '#27ae60',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    fontWeight: 'bold',
-                    boxShadow: '0 4px 8px rgba(0,0,0,0.2)'
-                  }}
-                >
-                  Serve Drink ✓
-                </button>
-                <button 
-                  onClick={handleClear}
-                  style={{
-                    padding: '15px 40px',
-                    fontSize: '18px',
-                    backgroundColor: '#e74c3c',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    fontWeight: 'bold',
-                    boxShadow: '0 4px 8px rgba(0,0,0,0.2)'
-                  }}
-                >
-                  Start Over
-                </button>
-              </div>
-            </div>
-          )}
+      // Add toppings to drink
+      setCurrentDrink({
+        ...currentDrink,
+        extras: currentToppings
+      });
+      
+      // Serve the drink and go back to order scene
+      handleServe();
+      setCurrentScene("order");
+      setShowToppingStation(false);
+    }}
+    onCancel={() => {
+      handleClear();
+    }}
+    drinkType={
+      currentDrink.base.includes('coffee') && currentDrink.base.includes('hot-chocolate') ? 'mocha' :
+      currentDrink.base.includes('coffee') ? 'coffee' : 'hot-chocolate'
+    }
+  />
+) : (
+  <DrinkMakingStation
+    onComplete={() => {
+      setShowToppingStation(true);
+    }}
+    onSkipToppings={() => {
+      // Serve directly without going to toppings
+      handleServe();
+      setCurrentScene("order");
+    }}
+    onCancel={() => {
+      handleClear();
+    }}
+    beansNeedRefill={beansNeedRefill}
+    onBeansRefilled={() => setCoffeesUsed(0)}
+    coffeesUsed={coffeesUsed}
+    onDrinkMade={(drinkData) => {
+      console.log("Drink made:", drinkData);
+      
+      // Update drink
+      setCurrentDrink({
+        base: drinkData.bases,
+        extras: []
+      });
+      
+      // Save metrics
+      setDrinkMetrics({
+        coffeeLevel: drinkData.coffeeLevel,
+        milkLevel: drinkData.milkLevel,
+        hotChocolateTemp: drinkData.temperature,
+        stirringDuration: drinkData.stirringDuration,
+        overflowed: drinkData.overflowed
+      });
+      
+      // Update coffee counter if coffee was used
+      if (drinkData.bases.includes('coffee')) {
+        setCoffeesUsed(coffeesUsed + 1);
+      }
+    }}
+  />
+)}
         </div>
       )}
     </div>
