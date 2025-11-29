@@ -23,7 +23,7 @@ const DraggableImage = ({
   onDragEnd,
 }: DraggableImageProps) => {
   const [isDragging, setIsDragging] = useState(false);
-  const imgRef = useRef<HTMLImageElement>(null);
+  // const imgRef = useRef<HTMLImageElement>(null);
   const dragPreviewRef = useRef<HTMLImageElement>(null);
 
   const handleDragStart = (e: React.DragEvent) => {
@@ -46,7 +46,7 @@ const DraggableImage = ({
     }
   };
 
-  const handleDragEnd = (e: React.DragEvent) => {
+  const handleDragEnd = (_e: React.DragEvent) => {
     setIsDragging(false);
     if (onDragEnd) {
       onDragEnd();

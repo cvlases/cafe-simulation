@@ -23,7 +23,7 @@ interface DrinkMakingStationProps {
 
 const DrinkMakingStation = ({ 
   onComplete, 
-  onSkipToppings,
+  // onSkipToppings,
   onCancel,
   beansNeedRefill,
   onBeansRefilled,
@@ -53,12 +53,12 @@ const DrinkMakingStation = ({
   const [kettleTemperature, setKettleTemperature] = useState(0); // 0-200°F
   const [stoveOn, setStoveOn] = useState(false);
   const [stoveState, setStoveState] = useState<'off' | 'on' | 'fire'>('off');
-  const [heatingTime, setHeatingTime] = useState(0);
+  // const [heatingTime, setHeatingTime] = useState(0);
   const [hotMilkLevel, setHotMilkLevel] = useState(0);
   const [pouringHotMilk, setPouringHotMilk] = useState(false);
   const [readyToPour, setReadyToPour] = useState(false); 
   const [isPouring, setIsPouring] = useState(false);
-  const [trashHover, setTrashHover] = useState(false);
+  // const [trashHover, setTrashHover] = useState(false);
 
   // Chocolate & Spoon states
   const [spoonState, setSpoonState] = useState<'empty' | 'full'>('empty');
@@ -104,7 +104,7 @@ const DrinkMakingStation = ({
     } else {
       setStoveOn(false);
       setStoveState('off');
-      setHeatingTime(0);
+      // setHeatingTime(0);
       setKettleTemperature(0); // Reset temperature when stove is turned off
     }
   };
@@ -764,7 +764,7 @@ useEffect(() => {
               onDrop={(data) => {
                 if (data.type === 'kettle') {
                   setKettleLocation('stove');
-                  setHeatingTime(0);
+                  // setHeatingTime(0);
                 }
               }}
               accepts={['kettle']}
@@ -977,8 +977,8 @@ useEffect(() => {
           }, 300);
         }
       }}
-      onDragEnter={() => setTrashHover(true)}
-      onDragLeave={() => setTrashHover(false)}
+      // onDragEnter={() => setTrashHover(true)}
+      // onDragLeave={() => setTrashHover(false)}
       accepts={['cup-to-trash', 'filled-cup']}
       style={{
         width: `${layout.trash.width}px`,

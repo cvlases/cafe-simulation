@@ -45,9 +45,9 @@ const [backButtonPressed, setBackButtonPressed] = useState(false);
   
   // Track positions for interactive dragging
   const [whippedCreamOverCup, setWhippedCreamOverCup] = useState(false);
-  const [marshmallowScoopOverCup, setMarshmallowScoopOverCup] = useState(false);
+  // const [marshmallowScoopOverCup, setMarshmallowScoopOverCup] = useState(false);
   const [sprinklesOverCup, setSprinklesOverCup] = useState(false);
-  const [trashHover, setTrashHover] = useState(false);
+  // const [trashHover, setTrashHover] = useState(false);
 
   const hasWhippedCream = currentToppings.includes("whipped-cream");
   const hasMarshmallows = currentToppings.includes("marshmallows");
@@ -108,19 +108,19 @@ const [backButtonPressed, setBackButtonPressed] = useState(false);
   }, [whippedCreamDuration, hasWhippedCream, whippedCreamOverCup, onAddTopping]);
 
   // Handle whipped cream drag over cup
-  const handleWhippedCreamDrag = (isOver: boolean) => {
-    setWhippedCreamOverCup(isOver);
-    if (!isOver) {
-      setWhippingCream(false);
-      setWhippedCreamDuration(0);
-    }
-  };
+  // const handleWhippedCreamDrag = (isOver: boolean) => {
+  //   setWhippedCreamOverCup(isOver);
+  //   if (!isOver) {
+  //     setWhippingCream(false);
+  //     setWhippedCreamDuration(0);
+  //   }
+  // };
 
   const handleMarshmallowScoop = () => {
   console.log("🍬 Marshmallow scoop dropped");
   if (!hasMarshmallows) {
     onAddTopping("marshmallows");
-    setMarshmallowScoopOverCup(false);
+    // setMarshmallowScoopOverCup(false);
   }
 };
 
@@ -322,8 +322,8 @@ const handleSprinkleShake = () => {
               onCancel(); // This calls the restart function
             }
           }}
-          onDragEnter={() => setTrashHover(true)}
-          onDragLeave={() => setTrashHover(false)}
+          // onDragEnter={() => setTrashHover(true)}
+          // onDragLeave={() => setTrashHover(false)}
           accepts={['cup-to-trash']}
           style={{
             width: `${layout.trash.width}px`,
@@ -377,7 +377,7 @@ const handleSprinkleShake = () => {
       handleSprinkleShake();
     }
   }}
-  onDragEnter={(data) => {
+  onDragEnter={(_data) => {
     console.log("⬇️ DRAG ENTER:", currentlyDragging); // DEBUG
     // Use global state instead of data.type
     if (currentlyDragging === 'whipped-cream') {
@@ -387,9 +387,9 @@ const handleSprinkleShake = () => {
         console.log("✅ Started whipping!");
       }
     }
-    if (currentlyDragging === 'marshmallow-scoop') {
-      setMarshmallowScoopOverCup(true);
-    }
+    // if (currentlyDragging === 'marshmallow-scoop') {
+    //   setMarshmallowScoopOverCup(true);
+    // }
     if (currentlyDragging === 'sprinkles') {
       setSprinklesOverCup(true);
     }
@@ -397,7 +397,7 @@ const handleSprinkleShake = () => {
   onDragLeave={() => {
     console.log("⬆️ DRAG LEAVE"); // DEBUG
     setWhippedCreamOverCup(false);
-    setMarshmallowScoopOverCup(false);
+    // setMarshmallowScoopOverCup(false);
     setSprinklesOverCup(false);
     setWhippingCream(false);
   }}

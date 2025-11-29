@@ -2,7 +2,7 @@
   "backgrounds": {
     "orderScene": "/assets/backgrounds/order_bg.jpg",
     "makingScene": "../assets/backgrounds/making_bg.PNG",
-    "orderSceneNight": "../public/assets/backgrounds/order_bg_night.jpg"
+    "orderSceneNight": "../assets/backgrounds/order_bg_night.jpg"
   },
   "customers": {
     "customer1": "../assets/customers/customer1.png",
@@ -108,15 +108,15 @@
     }
   },
   "buttons": {
-    "startMaking": "../assets/buttons/start_making.png",
-    "serve": "../assets/buttons/serve.png",
+    "startMaking": "../src/buttons/start_making.png",
+    "serve": "../src/buttons/serve.png",
     "clear": "../assets/buttons/clear.png"
   },
   "ui": {
     "buttons": {
       "forward": {
-        "normal": "../assets/ui/button_forward.png",
-        "pressed": "../assets/ui/button_forward_pressed.png"
+        "normal": "../assets/ui/button_forward.PNG",
+        "pressed": "../assets/ui/button_forward_pressed.PNG"
       },
       "back": {
         "normal": "../assets/ui/button_back.png",

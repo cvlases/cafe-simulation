@@ -4,7 +4,7 @@ import { useState } from "react";
 import Customer from "./components/Customer";
 import { customers } from "./data/customers";
 import { calculateScore } from "./utils/scoring";
-import type { DrinkInProgress, DrinkType, ExtraType, Order } from "./types";
+import type { DrinkInProgress,  ExtraType } from "./types";
 
 import DrinkMakingStation from './components/DrinkMakingStation';
 import ToppingStation from "./components/ToppingStation";
@@ -83,40 +83,40 @@ function App() {
     return assets.customers[key] || '';
   };
 
-  // Check order
-  const checkOrder = (drink: DrinkInProgress, order: Order): boolean => {
-    const orderedDrink = order.drink;
-    let madeDrink: DrinkType | null = null;
+  // // Check order
+  // const checkOrder = (drink: DrinkInProgress, order: Order): boolean => {
+  //   const orderedDrink = order.drink;
+  //   let madeDrink: DrinkType | null = null;
     
-    if (drink.base.length === 1) {
-      madeDrink = drink.base[0];
-    } else if (
-      drink.base.length === 2 && 
-      drink.base.includes("coffee") && 
-      drink.base.includes("hot-chocolate")
-    ) {
-      madeDrink = "mocha";
-    }
+  //   if (drink.base.length === 1) {
+  //     madeDrink = drink.base[0];
+  //   } else if (
+  //     drink.base.length === 2 && 
+  //     drink.base.includes("coffee") && 
+  //     drink.base.includes("hot-chocolate")
+  //   ) {
+  //     madeDrink = "mocha";
+  //   }
     
-    if (madeDrink !== orderedDrink) {
-      return false;
-    }
+  //   if (madeDrink !== orderedDrink) {
+  //     return false;
+  //   }
     
-    const orderedExtras = [...order.extras].sort();
-    const madeExtras = [...drink.extras].sort();
+  //   const orderedExtras = [...order.extras].sort();
+  //   const madeExtras = [...drink.extras].sort();
     
-    if (orderedExtras.length !== madeExtras.length) {
-      return false;
-    } 
+  //   if (orderedExtras.length !== madeExtras.length) {
+  //     return false;
+  //   } 
     
-    for (let i = 0; i < orderedExtras.length; i++) {
-      if (orderedExtras[i] !== madeExtras[i]) {
-        return false;
-      }
-    }
+  //   for (let i = 0; i < orderedExtras.length; i++) {
+  //     if (orderedExtras[i] !== madeExtras[i]) {
+  //       return false;
+  //     }
+  //   }
     
-    return true;
-  };
+  //   return true;
+  // };
 
   // Clear drink
   const handleClear = () => {
@@ -130,7 +130,7 @@ function App() {
   };
 
   // Serve drink
-  const [message, setMessage] = useState<string>("");
+  // const [message, setMessage] = useState<string>("");
 
   const handleServe = () => {
     console.log("Served:", currentDrink);
