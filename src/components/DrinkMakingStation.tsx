@@ -1324,10 +1324,13 @@ useEffect(() => {
           onTouchStart={() => setIsStirring(true)}
           onTouchEnd={() => setIsStirring(false)}
           style={{
+            position: 'fixed',
+            top: '600px',
+            left: '35%',
             padding: '20px 40px',
             fontSize: '18px',
             cursor: 'pointer',
-            backgroundColor: '#f39c12',
+            backgroundColor: '#ddb574ff',
             color: 'white',
             border: 'none',
             borderRadius: '8px',

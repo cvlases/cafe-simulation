@@ -1,12 +1,14 @@
 {
   "backgrounds": {
     "orderScene": "../src/assets/backgrounds/order_bg.jpg",
-    "makingScene": "../src/assets/backgrounds/making_bg.PNG"
+    "makingScene": "../src/assets/backgrounds/making_bg.PNG",
+    "orderSceneNight": "../src/assets/backgrounds/order_bg_night.jpg"
   },
   "customers": {
     "customer1": "../src/assets/customers/customer1.png",
     "customer2": "../src/assets/customers/customer2.png",
-    "customer3": "../src/assets/customers/customer3.png"
+    "customer3": "../src/assets/customers/customer3.png",
+    "customer4": "../src/assets/customers/customer4.png"
   },
 
 

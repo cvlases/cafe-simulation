@@ -8,17 +8,17 @@ export const customers: Customer[] = [
   id: 1,
   name: "Alex",
   order: {
-    drink: "mocha",
+    drink: "coffee",
     extras: []
   },
   patience: 100
 },
 {
   id: 2,
-  name: "Scoobers",
+  name: "Scott",
   order: {
     drink: "hot-chocolate",
-    extras: []
+    extras: ["whipped-cream", "marshmallows"]
   },
   patience: 90
 },
@@ -26,10 +26,29 @@ export const customers: Customer[] = [
   id: 3,
   name: "Toot Toot",
   order: {
-    drink: "coffee",
+    drink: "mocha",
     extras: []
   },
   patience: 80
+},
+{
+  id: 4,
+  name: "Claire",
+  order: {
+    drink: "coffee",
+    extras: ["marshmallows"]
+  },
+  patience: 80
+},
+{
+  id: 5,
+  name: "Scoobers",
+  order: {
+    drink: "hot-chocolate",
+    extras: ["whipped-cream", "marshmallows"]
+  },
+  patience: 90
 }
+
 
 ];

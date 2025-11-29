@@ -10,6 +10,10 @@ import DrinkMakingStation from './components/DrinkMakingStation';
 import ToppingStation from "./components/ToppingStation";
 import Scorecard from './components/Scorecard';
 
+import OrderReceipt from './components/OrderReceipt';
+import RecipeBook from './components/RecipeBook';
+import DaySummary from './components/DaySummary';
+
 import { calculateEarnings, formatMoney } from "./utils/money";
 import type { Transaction } from "./utils/money"
 
@@ -57,6 +61,7 @@ function App() {
   // Scoring
   const [showScorecard, setShowScorecard] = useState(false);
   const [lastScore, setLastScore] = useState(0);
+  const [showDaySummary, setShowDaySummary] = useState(false);
 
   // Money
   const [totalEarnings, setTotalEarnings] = useState(0);
@@ -159,37 +164,95 @@ function App() {
     setShowScorecard(true);
   };
 
-  const handleContinueAfterScore = () => {
-    setShowScorecard(false);
-    handleClear();
-    
-    // Move to next customer
-    if (currentCustomerIndex < customers.length - 1) {
-      setCurrentCustomerIndex(currentCustomerIndex + 1);
-    } else {
-      setMessage("Day complete! You served all customers!");
-    }
-  };
+const handleContinueAfterScore = () => {
+  setShowScorecard(false);
+  handleClear();
+  setCurrentScene("order");
+  
+  // Move to next customer
+  if (currentCustomerIndex < customers.length - 1) {
+    setCurrentCustomerIndex(currentCustomerIndex + 1);
+  } else {
+    // Day complete - show summary
+    setTimeout(() => {
+      setShowDaySummary(true);
+    }, 500);
+  }
+};
+
+  const handleRestartDay = () => {
+  setShowDaySummary(false);
+  setCurrentCustomerIndex(0);
+  setTotalEarnings(0);
+  setTransactions([]);
+  handleClear();
+  setCurrentScene("order");
+};
 
   return (
     <div>
       <h1>Café Simulator</h1>
       
       {currentScene === "order" && (
-        <div 
-          className="order-scene"
-          style={{
-            backgroundImage: `url(${assets.backgrounds.orderScene})`,
-            height: `${layouts.orderScene.container.height}px`,
-            width: `${layouts.orderScene.container.width}px`,
-            margin: '0 auto',
-            position: 'relative',
-            backgroundSize: '100% 100%'
-          }}
-        >
-          <div className="earnings-display">
-            <h3>Total Earnings: {formatMoney(totalEarnings)}</h3>
-          </div>
+         <div 
+    className="order-scene"
+    style={{
+      backgroundImage: `url(${
+        currentCustomerIndex === customers.length - 1 
+          ? assets.backgrounds.orderSceneNight 
+          : assets.backgrounds.orderScene
+      })`,
+      height: `${layouts.orderScene.container.height}px`,
+      width: `${layouts.orderScene.container.width}px`,
+      margin: '0 auto',
+      position: 'relative',
+      backgroundSize: '100% 100%'
+    }}
+  >
+         <div className="earnings-display" style={{
+  position: 'absolute',
+  top: '20px',
+  right: '20px',
+  backgroundColor: '#fff9e6',
+  border: '3px solid #f4c430',
+  borderRadius: '15px',
+  padding: '15px 25px',
+  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '10px',
+  zIndex: 1000
+}}>
+  <span style={{
+    fontSize: '32px',
+    filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.2))'
+  }}>
+    💰
+  </span>
+  <div>
+    <p style={{
+      margin: 0,
+      fontSize: '14px',
+      color: '#8b7355',
+      fontWeight: 'bold',
+      textTransform: 'uppercase',
+      letterSpacing: '1px'
+    }}>
+      Total Earnings
+    </p>
+    <p style={{
+      margin: 0,
+      fontSize: '28px',
+      color: '#2d5016',
+      fontWeight: 'bold',
+      fontFamily: 'Georgia, serif'
+    }}>
+      {formatMoney(totalEarnings)}
+    </p>
+  </div>
+
+
+</div>
 
           {showScorecard && (
             <Scorecard 
@@ -241,6 +304,8 @@ function App() {
 />
         </div>
       )}
+
+       
       
       {currentScene === "making" && (
         <div 
@@ -256,6 +321,9 @@ function App() {
             backgroundRepeat: 'no-repeat'
           }}
         >
+              <OrderReceipt order={customers[currentCustomerIndex].order} />
+              <RecipeBook />
+
           {/* Back button */}
 <img
   src={backButtonPressed ? assets.ui.buttons.back.pressed : assets.ui.buttons.back.normal}
@@ -360,6 +428,16 @@ function App() {
   />
 )}
         </div>
+
+        
+      )}
+      {/* Day Summary - Shows when all customers served */}
+      {showDaySummary && (
+        <DaySummary
+          totalEarnings={totalEarnings}
+          transactions={transactions}
+          onRestart={handleRestartDay}
+        />
       )}
     </div>
   );
