@@ -1,8 +1,8 @@
 {
   "backgrounds": {
-    "orderScene": "../assets/backgrounds/order_bg.jpg",
+    "orderScene": "/assets/backgrounds/order_bg.jpg",
     "makingScene": "../assets/backgrounds/making_bg.PNG",
-    "orderSceneNight": "../assets/backgrounds/order_bg_night.jpg"
+    "orderSceneNight": "../public/assets/backgrounds/order_bg_night.jpg"
   },
   "customers": {
     "customer1": "../assets/customers/customer1.png",
