@@ -66,7 +66,25 @@ const Customer = ({ customer, imageUrl }: CustomerProps) => {
     borderBottom: '12px solid transparent',
     borderRight: '16px solid #ffffff'
   }} />
-
+ {/* Customer Name Badge */}
+        <div style={{
+          backgroundColor: '#ff9ecd',
+          padding: '6px 14px',
+          borderRadius: '15px',
+          marginBottom: '5px'
+        }}>
+          <p style={{
+            margin: 0,
+            fontSize: '13px',
+            color: 'white',
+            fontWeight: 'bold',
+            textTransform: 'uppercase',
+            letterSpacing: '1px'
+          }}>
+            {customer.name}
+          </p>
+        </div>
+        
   {/* Header */}
   <p style={{
     margin: 0,
