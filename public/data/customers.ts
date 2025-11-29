@@ -1,6 +1,6 @@
 
 
-import type { Customer } from "../types";
+import type { Customer } from "../../types";
 
 export const customers: Customer[] = [
   // customers go here
