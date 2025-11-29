@@ -20,7 +20,7 @@
       "empty": "../assets/objects/cup_empty.png",
       "coffee_full": "../assets/objects/cup_coffee_full.png",
       "overflow": "../assets/objects/cup_overflow.png",
-      "stack": "../assets/objects/cup_stack.png",
+      "stack": "assets/objects/cup_stack.png",
       "milk_filled": "../assets/objects/cup_milk_filled.png",
       "hot_chocolate_done": "../assets/objects/cup_hot_chocolate_done.png",
       "coffee_done": "../assets/objects/cup_coffee_done.png",
