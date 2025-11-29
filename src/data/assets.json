@@ -1,6 +1,6 @@
 {
   "backgrounds": {
-    "orderScene": "/assets/backgrounds/order_bg.jpg",
+    "orderScene": "assets/backgrounds/order_bg.jpg",
     "makingScene": "../assets/backgrounds/making_bg.PNG",
     "orderSceneNight": "../assets/backgrounds/order_bg_night.jpg"
   },
@@ -115,7 +115,7 @@
   "ui": {
     "buttons": {
       "forward": {
-        "normal": "../assets/ui/button_forward.PNG",
+        "normal": "/assets/ui/button_forward.PNG",
         "pressed": "../assets/ui/button_forward_pressed.PNG"
       },
       "back": {
