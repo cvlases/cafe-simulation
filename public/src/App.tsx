@@ -17,7 +17,7 @@ import DaySummary from './components/DaySummary';
 import { calculateEarnings, formatMoney } from "./utils/money";
 import type { Transaction } from "./utils/money"
 
-import sceneConfig from '../data/sceneConfig.json';
+import sceneConfig from './data/sceneConfig.json';
 import type { SceneConfig } from './types';
 
 import { useAssets } from './hooks/useAssets';
