@@ -1,14 +1,14 @@
 {
   "backgrounds": {
     "orderScene": "assets/backgrounds/order_bg.jpg",
-    "makingScene": "../assets/backgrounds/making_bg.PNG",
-    "orderSceneNight": "../assets/backgrounds/order_bg_night.jpg"
+    "makingScene": "assets/backgrounds/making_bg.PNG",
+    "orderSceneNight": "assets/backgrounds/order_bg_night.jpg"
   },
   "customers": {
-    "customer1": "../assets/customers/customer1.png",
-    "customer2": "../assets/customers/customer2.png",
-    "customer3": "../assets/customers/customer3.png",
-    "customer4": "../assets/customers/customer4.png"
+    "customer1": "assets/customers/customer1.png",
+    "customer2": "assets/customers/customer2.png",
+    "customer3": "assets/customers/customer3.png",
+    "customer4": "assets/customers/customer4.png"
   },
 
 
@@ -17,118 +17,114 @@
 
   "objects": {
     "cup": {
-      "empty": "../assets/objects/cup_empty.png",
-      "coffee_full": "../assets/objects/cup_coffee_full.png",
-      "overflow": "../assets/objects/cup_overflow.png",
+      "empty": "assets/objects/cup_empty.png",
+      "coffee_full": "assets/objects/cup_coffee_full.png",
+      "overflow": "assets/objects/cup_overflow.png",
       "stack": "assets/objects/cup_stack.png",
-      "milk_filled": "../assets/objects/cup_milk_filled.png",
-      "hot_chocolate_done": "../assets/objects/cup_hot_chocolate_done.png",
-      "coffee_done": "../assets/objects/cup_coffee_done.png",
-      "mocha_done": "../assets/objects/cup_mocha_done.png",
-      "with_whipped_cream": "../assets/objects/cup_with_whipped_cream.png",
-      "with_whipped_cream_marshmallows": "../assets/objects/cup_with_whipped_cream_marshmallows.png",
-      "with_whipped_cream_sprinkles": "../assets/objects/cup_with_whipped_cream_sprinkles.png",
-      "with_whipped_cream_marshmallows_sprinkles": "../assets/objects/cup_with_all_toppings.png",
-      "with_marshmallows": "../assets/objects/cup_with_marshmallows.png",
-      "with_sprinkles": "../assets/objects/cup_with_sprinkles.png",
-      "with_marshmallows_sprinkles": "../assets/objects/cup_with_marshmallows_sprinkles.png",
-      "trash": "../assets/objects/trash.png"
+      "milk_filled": "assets/objects/cup_milk_filled.png",
+      "hot_chocolate_done": "assets/objects/cup_hot_chocolate_done.png",
+      "coffee_done": "assets/objects/cup_coffee_done.png",
+      "mocha_done": "assets/objects/cup_mocha_done.png",
+      "with_whipped_cream": "assets/objects/cup_with_whipped_cream.png",
+      "with_whipped_cream_marshmallows": "assets/objects/cup_with_whipped_cream_marshmallows.png",
+      "with_whipped_cream_sprinkles": "assets/objects/cup_with_whipped_cream_sprinkles.png",
+      "with_whipped_cream_marshmallows_sprinkles": "assets/objects/cup_with_all_toppings.png",
+      "with_marshmallows": "assets/objects/cup_with_marshmallows.png",
+      "with_sprinkles": "assets/objects/cup_with_sprinkles.png",
+      "with_marshmallows_sprinkles": "assets/objects/cup_with_marshmallows_sprinkles.png",
+      "trash": "assets/objects/trash.png"
     },
     "coffeeMaker": {
-      "idle": "../assets/objects/coffee_maker_idle.png",
-      "brewing1": "../assets/objects/coffee_maker_brewing1.png",
-      "brewing2": "../assets/objects/coffee_maker_brewing2.png",
-      "brewing3": "../assets/objects/coffee_maker_brewing3.png",
-      "end": "../assets/objects/coffee_maker_end.png"
+      "idle": "assets/objects/coffee_maker_idle.png",
+      "brewing1": "assets/objects/coffee_maker_brewing1.png",
+      "brewing2": "assets/objects/coffee_maker_brewing2.png",
+      "brewing3": "assets/objects/coffee_maker_brewing3.png",
+      "end": "assets/objects/coffee_maker_end.png"
     },
     "beans": {
-      "full": "../assets/objects/beans_jar_full.png",
-      "half": "../assets/objects/beans_jar_half.png",
-      "empty": "../assets/objects/beans_jar_empty.png"
+      "full": "assets/objects/beans_jar_full.png",
+      "half": "assets/objects/beans_jar_half.png",
+      "empty": "assets/objects/beans_jar_empty.png"
     },
     "milk": {
-      "container": "../assets/objects/milk_container.png",
-      "pouring": "../assets/objects/milk_pouring.png"
+      "container": "assets/objects/milk_container.png",
+      "pouring": "assets/objects/milk_pouring.png"
     },
     "kettle": {
-      "regular": "../assets/objects/kettle_regular.png",
-      "hot": "../assets/objects/kettle_hot.png",
-      "pouring": "../assets/objects/kettle_pouring.png"
+      "regular": "assets/objects/kettle_regular.png",
+      "hot": "assets/objects/kettle_hot.png",
+      "pouring": "assets/objects/kettle_pouring.png"
     },
     "stove": {
-      "off": "../assets/objects/stove_off.png",
-      "on": "../assets/objects/stove_on.png",
-      "fire": "../assets/objects/stove_fire.png"
+      "off": "assets/objects/stove_off.png",
+      "on": "assets/objects/stove_on.png",
+      "fire": "assets/objects/stove_fire.png"
     },
     "chocolate": {
-      "bowl": "../assets/objects/chocolate_bowl.png",
-      "spoon_empty": "../assets/objects/chocolate_empty_spoon.png",
-      "spoon_full": "../assets/objects/chocolate_full_spoon.png"
+      "bowl": "/assets/objects/chocolate_bowl.png",
+      "spoon_empty": "assets/objects/chocolate_empty_spoon.png",
+      "spoon_full": "assets/objects/chocolate_full_spoon.png"
     },
     "trash": {
-      "empty": "../assets/objects/trash_empty.png",
-      "full": "../assets/objects/trash_full.png"
+      "empty": "/assets/objects/trash_empty.png",
+      "full": "/assets/objects/trash_full.png"
     },
     "spoon": {
-      "empty": "../assets/objects/chocolate_empty_spoon.png",
-      "full": "../assets/objects/chocolate_full_spoon.png",
-      "stirring": "../assets/objects/spoon_stirring.png"
+      "empty": "assets/objects/chocolate_empty_spoon.png",
+      "full": "/assets/objects/chocolate_full_spoon.png",
+      "stirring": "assets/objects/spoon_stirring.png"
     },
     "stirring": {
       "coffee": {
-        "left": "../assets/objects/stir_coffee_left.png",
-        "center": "../assets/objects/stir_coffee_center.png",
-        "right": "../assets/objects/stir_coffee_right.png"
+        "left": "assets/objects/stir_coffee_left.png",
+        "center": "assets/objects/stir_coffee_center.png",
+        "right": "assets/objects/stir_coffee_right.png"
       },
       "hotChocolate": {
-        "left": "../assets/objects/stir_hotchocolate_left.png",
-        "center": "../assets/objects/stir_hotchocolate_center.png",
-        "right": "../assets/objects/stir_hotchocolate_right.png"
+        "left": "/assets/objects/stir_hotchocolate_left.png",
+        "center": "/assets/objects/stir_hotchocolate_center.png",
+        "right": "/assets/objects/stir_hotchocolate_right.png"
       },
       "mocha": {
-        "left": "../assets/objects/stir_mocha_left.png",
-        "center": "../assets/objects/stir_mocha_center.png",
-        "right": "../assets/objects/stir_mocha_right.png"
+        "left": "/assets/objects/stir_mocha_left.png",
+        "center": "/assets/objects/stir_mocha_center.png",
+        "right": "/assets/objects/stir_mocha_right.png"
       }
     },
     "toppings": {
       "whippedCream": {
-        "canister": "../assets/objects/whipped_cream_canister.png",
-        "dispensing": "../assets/objects/whipped_cream_dispensing.png"
+        "canister": "/assets/objects/whipped_cream_canister.png",
+        "dispensing": "/assets/objects/whipped_cream_dispensing.png"
       },
       "marshmallows": {
-        "container": "../assets/objects/marshmallows_container.png",
-        "scooping": "../assets/objects/marshmallows_scooping.png",
-        "scoop": "../assets/objects/marshmallow_scoop.png"
+        "container": "assets/objects/marshmallows_container.png",
+        "scooping": "assets/objects/marshmallows_scooping.png",
+        "scoop": "assets/objects/marshmallow_scoop.png"
       },
       "sprinkles": {
-        "jar": "../assets/objects/sprinkles_jar.png",
-        "shaking": "../assets/objects/sprinkles_shaking.png"
+        "jar": "assets/objects/sprinkles_jar.png",
+        "shaking": "assets/objects/sprinkles_shaking.png"
       }
     }
   },
-  "buttons": {
-    "startMaking": "../src/buttons/start_making.png",
-    "serve": "../src/buttons/serve.png",
-    "clear": "../assets/buttons/clear.png"
-  },
+
   "ui": {
     "buttons": {
       "forward": {
-        "normal": "/assets/ui/button_forward.PNG",
-        "pressed": "../assets/ui/button_forward_pressed.PNG"
+        "normal": "assets/ui/button_forward.PNG",
+        "pressed": "assets/ui/button_forward_pressed.PNG"
       },
       "back": {
-        "normal": "../assets/ui/button_back.png",
-        "pressed": "../assets/ui/button_back_pressed.png"
+        "normal": "assets/ui/button_back.png",
+        "pressed": "assets/ui/button_back_pressed.png"
       }
     }
   },
   "animations": {
     "pour": [
-      "../assets/animations/pour_01.png",
-      "../assets/animations/pour_02.png",
-      "../assets/animations/pour_03.png"
+      "assets/animations/pour_01.png",
+      "assets/animations/pour_02.png",
+      "assets/animations/pour_03.png"
     ]
   }
 }
