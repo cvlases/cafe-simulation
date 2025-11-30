@@ -5,10 +5,10 @@
     "orderSceneNight": "assets/backgrounds/order_bg_night.jpg"
   },
   "customers": {
-    "customer1": "assets/customers/customer1.png",
-    "customer2": "assets/customers/customer2.png",
-    "customer3": "assets/customers/customer3.png",
-    "customer4": "assets/customers/customer4.png"
+    "customer1": "assets/customers/scott.png",
+    "customer2": "assets/customers/nicole.png",
+    "customer3": "assets/customers/trey.png",
+    "customer4": "assets/customers/tomi.png"
   },
 
 
@@ -25,14 +25,14 @@
       "hot_chocolate_done": "assets/objects/cup_hot_chocolate_done.png",
       "coffee_done": "assets/objects/cup_coffee_done.png",
       "mocha_done": "assets/objects/cup_mocha_done.png",
-      "with_whipped_cream": "assets/objects/cup_with_whipped_cream.png",
-      "with_whipped_cream_marshmallows": "assets/objects/cup_with_whipped_cream_marshmallows.png",
-      "with_whipped_cream_sprinkles": "assets/objects/cup_with_whipped_cream_sprinkles.png",
-      "with_whipped_cream_marshmallows_sprinkles": "assets/objects/cup_with_all_toppings.png",
-      "with_marshmallows": "assets/objects/cup_with_marshmallows.png",
+      "with_whipped_cream": "assets/objects/cup_with_whipped_cream.PNG",
+      "with_whipped_cream_marshmallows": "assets/objects/cup_with_whipped_cream_marshmallows.PNG",
+      "with_whipped_cream_sprinkles": "assets/objects/cup_with_whipped_cream_sprinkles.PNG",
+      "with_whipped_cream_marshmallows_sprinkles": "assets/objects/cup_with_all_toppings.PNG",
+      "with_marshmallows": "assets/objects/cup_with_marshmallows.PNG",
       "with_sprinkles": "assets/objects/cup_with_sprinkles.png",
-      "with_marshmallows_sprinkles": "assets/objects/cup_with_marshmallows_sprinkles.png",
-      "trash": "assets/objects/trash.png"
+      "with_marshmallows_sprinkles": "assets/objects/cup_with_marshmallows_sprinkles.png"
+
     },
     "coffeeMaker": {
       "idle": "assets/objects/coffee_maker_idle.png",
@@ -93,17 +93,17 @@
     },
     "toppings": {
       "whippedCream": {
-        "canister": "/assets/objects/whipped_cream_canister.png",
-        "dispensing": "/assets/objects/whipped_cream_dispensing.png"
+        "canister": "/assets/objects/whipped_cream_canister.PNG",
+        "dispensing": "/assets/objects/whipped_cream_dispensing.PNG"
       },
       "marshmallows": {
-        "container": "assets/objects/marshmallows_container.png",
-        "scooping": "assets/objects/marshmallows_scooping.png",
+        "container": "assets/objects/marshmallows_container.PNG",
+        "scooping": "assets/objects/marshmallows_scooping.PNG",
         "scoop": "assets/objects/marshmallow_scoop.png"
       },
       "sprinkles": {
         "jar": "assets/objects/sprinkles_jar.png",
-        "shaking": "assets/objects/sprinkles_shaking.png"
+        "shaking": "assets/objects/sprinkles_shaking.PNG"
       }
     }
   },
@@ -115,8 +115,8 @@
         "pressed": "assets/ui/button_forward_pressed.PNG"
       },
       "back": {
-        "normal": "assets/ui/button_back.png",
-        "pressed": "assets/ui/button_back_pressed.png"
+        "normal": "assets/ui/button_back.PNG",
+        "pressed": "assets/ui/button_back_pressed.PNG"
       }
     }
   },

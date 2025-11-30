@@ -6,7 +6,7 @@ export const customers: Customer[] = [
   // customers go here
   {
   id: 1,
-  name: "Alex",
+  name: "Scott",
   order: {
     drink: "coffee",
     extras: []
@@ -15,7 +15,7 @@ export const customers: Customer[] = [
 },
 {
   id: 2,
-  name: "Scott",
+  name: "Nicole",
   order: {
     drink: "hot-chocolate",
     extras: ["whipped-cream", "marshmallows"]
@@ -24,7 +24,7 @@ export const customers: Customer[] = [
 },
 {
   id: 3,
-  name: "Toot Toot",
+  name: "Trey",
   order: {
     drink: "mocha",
     extras: []
@@ -33,22 +33,14 @@ export const customers: Customer[] = [
 },
 {
   id: 4,
-  name: "Claire",
+  name: "Tomi",
   order: {
     drink: "coffee",
     extras: ["marshmallows"]
   },
   patience: 80
-},
-{
-  id: 5,
-  name: "Scoobers",
-  order: {
-    drink: "hot-chocolate",
-    extras: ["whipped-cream", "marshmallows"]
-  },
-  patience: 90
 }
+
 
 
 ];

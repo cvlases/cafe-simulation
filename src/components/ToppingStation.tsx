@@ -160,12 +160,9 @@ const handleSprinkleShake = () => {
       position: 'relative',
       minHeight: '600px'
     }}>
-      <h2>Add Toppings ✨</h2>
+      <h2>Add Toppings ᵔ ᵕ ᵔ</h2>
       
-      <p style={{ fontSize: '16px', color: '#666' }}>
-  {!hasWhippedCream ? 'Whipped cream is best added first!' :
-   'Add any other toppings you like!'}
-</p>
+
 
       {/* Main Layout */}
       <div style={{ 
