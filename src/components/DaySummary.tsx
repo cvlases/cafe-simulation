@@ -136,28 +136,28 @@ const DaySummary = ({ totalEarnings, transactions, onRestart }: DaySummaryProps)
           {/* Other Stats */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px' }}>
-              <span style={{ fontSize: '14px', color: '#666' }}>👥 Customers Served</span>
+              <span style={{ fontSize: '14px', color: '#666' }}> Customers Served</span>
               <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#2e7d32' }}>
                 {customersServed}
               </span>
             </div>
             
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px' }}>
-              <span style={{ fontSize: '14px', color: '#666' }}>📊 Average Score</span>
+              <span style={{ fontSize: '14px', color: '#666' }}> Average Score</span>
               <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#2e7d32' }}>
                 {averageScore}%
               </span>
             </div>
             
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px' }}>
-              <span style={{ fontSize: '14px', color: '#666' }}>⭐ Perfect Orders</span>
+              <span style={{ fontSize: '14px', color: '#666' }}> Perfect Orders</span>
               <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#2e7d32' }}>
                 {perfectOrders}
               </span>
             </div>
             
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px' }}>
-              <span style={{ fontSize: '14px', color: '#666' }}>💵 Tips Earned</span>
+              <span style={{ fontSize: '14px', color: '#666' }}> Tips Earned</span>
               <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#2e7d32' }}>
                 {formatMoney(totalTips)}
               </span>
@@ -192,7 +192,7 @@ const DaySummary = ({ totalEarnings, transactions, onRestart }: DaySummaryProps)
             e.currentTarget.style.transform = 'scale(1)';
           }}
         >
-          Start New Day 🌅
+          Start New Day ☼
         </button>
       </div>
 

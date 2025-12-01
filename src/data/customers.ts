@@ -27,7 +27,7 @@ export const customers: Customer[] = [
   name: "Trey",
   order: {
     drink: "mocha",
-    extras: []
+    extras: ["marshmallows"]
   },
   patience: 80
 },
@@ -36,7 +36,7 @@ export const customers: Customer[] = [
   name: "Tomi",
   order: {
     drink: "coffee",
-    extras: ["marshmallows"]
+    extras: ["whipped-cream", "sprinkles"]
   },
   patience: 80
 }

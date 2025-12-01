@@ -12,10 +12,10 @@ interface ScorecardProps {
 const Scorecard = ({ score, customerName, earnings, onContinue }: ScorecardProps) => {
   const getReaction = (score: number) => {
     if (score >= 90) return "Thank you, this is perfect! ٩(ˊᗜˋ*)و ♡ ";
-    if (score >= 75) return "Pretty good, thanks! ദ്ദി(˵ •̀ ᴗ - ˵ ) ✧";
-    if (score >= 60) return "um you call urself a barista????? ૮ ˶︶^︶˶ ა ";
+    if (score >= 75) return "Pretty good, thanks!  ˙ᵕ˙";
+    if (score >= 60) return "um you call urself a barista????? (⊙ _ ⊙ ) ";
     if (score >= 40) return "Yuck i hate it 𓉸";
-    return "😡 This is terrible!";
+    return " ABSOLUTELY NOT (𓌻‸𓌻) ᴜɢʜ. ";
   };
 
   return (

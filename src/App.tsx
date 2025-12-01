@@ -191,7 +191,7 @@ const handleContinueAfterScore = () => {
 
   return (
     <div>
-      <h1>Café Simulator</h1>
+      <h1>𖤓 Claire's Café 𖤓</h1>
       
       {currentScene === "order" && (
          <div 
