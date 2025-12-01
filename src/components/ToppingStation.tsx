@@ -41,7 +41,7 @@ const ToppingStation = ({
 
   // Button states
   const [forwardButtonPressed, setForwardButtonPressed] = useState(false);
-const [backButtonPressed, setBackButtonPressed] = useState(false);
+  const [backButtonPressed, setBackButtonPressed] = useState(false);
   
   // Track positions for interactive dragging
   const [whippedCreamOverCup, setWhippedCreamOverCup] = useState(false);
@@ -551,7 +551,7 @@ const handleSprinkleShake = () => {
       transition: 'transform 0.1s',
       transform: forwardButtonPressed ? 'scale(0.95)' : 'scale(1)',
       userSelect: 'none',
-      zIndex: 9999
+      zIndex: 9990
     }}
   />
 

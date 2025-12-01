@@ -3,7 +3,7 @@ import { useLayouts } from '../hooks/useLayouts';
 
 interface CustomerProps {
   customer: CustomerType;
-  imageUrl?: string; // Optional image URL
+  imageUrl?: string; // for the image URL
 }
 
 const Customer = ({ customer, imageUrl }: CustomerProps) => {
@@ -25,24 +25,23 @@ const Customer = ({ customer, imageUrl }: CustomerProps) => {
       )}
       
       {/* Speech Bubble with Order */}
-      {/* Order Speech Bubble - Cute version */}
-<div style={{
-  position: 'absolute',
-  left: `${layout.orderBubble.x}px`,
-  top: `${layout.orderBubble.y}px`,
-  width: `${layout.orderBubble.width}px`,
-  minHeight: `${layout.orderBubble.height}px`,
-  backgroundColor: '#ffffff',
-  border: '4px solid #ff9ecd',
-  borderRadius: '25px',
-  padding: '20px',
-  boxShadow: '0 6px 16px rgba(255, 158, 205, 0.4)',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  gap: '8px',
-}}>
+    <div style={{
+      position: 'absolute',
+      left: `${layout.orderBubble.x}px`,
+      top: `${layout.orderBubble.y}px`,
+      width: `${layout.orderBubble.width}px`,
+      minHeight: `${layout.orderBubble.height}px`,
+      backgroundColor: '#ffffff',
+      border: '4px solid #c36c96ff',
+      borderRadius: '25px',
+      padding: '20px',
+      boxShadow: '0 6px 16px rgba(255, 158, 205, 0.4)',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '8px',
+    }}>
   {/* Speech bubble tail */}
   <div style={{
     position: 'absolute',
@@ -53,7 +52,7 @@ const Customer = ({ customer, imageUrl }: CustomerProps) => {
     height: 0,
     borderTop: '15px solid transparent',
     borderBottom: '15px solid transparent',
-    borderRight: '20px solid #ff9ecd'
+    borderRight: '20px solid #c36c96ff'
   }} />
   <div style={{
     position: 'absolute',
@@ -66,9 +65,10 @@ const Customer = ({ customer, imageUrl }: CustomerProps) => {
     borderBottom: '12px solid transparent',
     borderRight: '16px solid #ffffff'
   }} />
+  
  {/* Customer Name Badge */}
         <div style={{
-          backgroundColor: '#ff9ecd',
+          backgroundColor: '#ad5881ff',
           padding: '6px 14px',
           borderRadius: '15px',
           marginBottom: '5px'
@@ -94,7 +94,7 @@ const Customer = ({ customer, imageUrl }: CustomerProps) => {
     textTransform: 'uppercase',
     letterSpacing: '1.5px'
   }}>
-    I'd like...
+    May I please have ...
   </p>
 
   {/* Drink name */}
@@ -149,9 +149,9 @@ const Customer = ({ customer, imageUrl }: CustomerProps) => {
               border: '2px solid #ffe0f0'
             }}
           >
-            {extra === 'whipped-cream' && '🍦 Whipped Cream'}
-            {extra === 'marshmallows' && '🍬 Marshmallows'}
-            {extra === 'sprinkles' && '✨ Sprinkles'}
+            {extra === 'whipped-cream' && ' ✧.* Whipped Cream'}
+            {extra === 'marshmallows' && '˙⋆✮ Marshmallows'}
+            {extra === 'sprinkles' && '・・・・・Sprinkles'}
           </span>
         ))}
       </div>

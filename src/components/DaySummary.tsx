@@ -16,17 +16,18 @@ const DaySummary = ({ totalEarnings, transactions, onRestart }: DaySummaryProps)
   const perfectOrders = transactions.filter(t => t.score === 100).length;
 
   const getPerformanceMessage = () => {
-    if (averageScore >= 90) return "🌟 Outstanding Work!";
-    if (averageScore >= 75) return "😊 Great Job!";
-    if (averageScore >= 60) return "👍 Good Effort!";
-    return "💪 Keep Practicing!";
+    if (averageScore >= 90) return "✰ ✰ ✰ ✰ ✰ ";
+    if (averageScore >= 80) return "✰ ✰ ✰ ✰ ";
+    if (averageScore >= 70) return "✰ ✰ ✰  ";
+    if (averageScore >= 60) return "✰ ✰ ";
+    return "✰";
   };
 
   const getPerformanceColor = () => {
-    if (averageScore >= 90) return "#ffd700";
-    if (averageScore >= 75) return "#4caf50";
-    if (averageScore >= 60) return "#ff9800";
-    return "#9e9e9e";
+    if (averageScore >= 90) return "#c16767ff";
+    if (averageScore >= 75) return "#4c8cafff";
+    if (averageScore >= 60) return "#a268d5ff";
+    return "#82b59aff";
   };
 
   return (
@@ -45,7 +46,7 @@ const DaySummary = ({ totalEarnings, transactions, onRestart }: DaySummaryProps)
     }}>
       <div style={{
         backgroundColor: '#ffffff',
-        border: '4px solid #4caf50',
+        border: '4px solid #4cafa7ff',
         borderRadius: '20px',
         padding: '40px',
         maxWidth: '500px',
@@ -58,7 +59,7 @@ const DaySummary = ({ totalEarnings, transactions, onRestart }: DaySummaryProps)
           textAlign: 'center',
           marginBottom: '30px',
           paddingBottom: '20px',
-          borderBottom: '3px dashed #4caf50'
+          borderBottom: '3px dashed #4c95afff'
         }}>
           <h1 style={{
             margin: '0 0 10px 0',
@@ -66,7 +67,7 @@ const DaySummary = ({ totalEarnings, transactions, onRestart }: DaySummaryProps)
             color: '#2e7d32',
             fontFamily: 'Georgia, serif'
           }}>
-            Day Complete! 🎉
+            Day Complete! ⋆⁺₊⋆ ☀︎ ⋆⁺₊⋆
           </h1>
           <p style={{
             margin: 0,
@@ -74,7 +75,7 @@ const DaySummary = ({ totalEarnings, transactions, onRestart }: DaySummaryProps)
             color: '#666',
             fontStyle: 'italic'
           }}>
-            Time to close up the café
+            Time to close up the café ◡̈
           </p>
         </div>
 
@@ -172,7 +173,7 @@ const DaySummary = ({ totalEarnings, transactions, onRestart }: DaySummaryProps)
             padding: '18px',
             fontSize: '20px',
             fontWeight: 'bold',
-            backgroundColor: '#4caf50',
+            backgroundColor: '#026902ff',
             color: 'white',
             border: 'none',
             borderRadius: '12px',
@@ -183,11 +184,11 @@ const DaySummary = ({ totalEarnings, transactions, onRestart }: DaySummaryProps)
             letterSpacing: '1px'
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#45a049';
+            e.currentTarget.style.backgroundColor = '#4c9550ff';
             e.currentTarget.style.transform = 'scale(1.05)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = '#4caf50';
+            e.currentTarget.style.backgroundColor = '#325933ff';
             e.currentTarget.style.transform = 'scale(1)';
           }}
         >

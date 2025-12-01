@@ -62,7 +62,7 @@ const DraggableImage = ({
 
   return (
     <>
-      {/* Hidden drag preview image - always rendered */}
+      {/* Hidden drag preview image */}
       <img
         ref={dragPreviewRef}
         src={draggingSrc || src}

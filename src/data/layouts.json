@@ -20,16 +20,16 @@
       "startButton": {
         "x": 400,
         "y": 650,
-        "width": 150,
+        "width": 200,
         "height": 60
-      }
-    }, 
+      }, 
     "buttons": {
       "forward": {
         "x": 400,
-        "y": 650,
-        "width": 200
+        "y": 600,
+        "width": 350
       }
+    }
     }
   },
   "makingScene": {
@@ -169,12 +169,12 @@
     "buttons": {
       "back": {
         "x": 10,
-        "y": 750,
+        "y": 650,
         "width": 200
       },
       "forward": {
-        "x": 1200,
-        "y": 750,
+        "x": 1100,
+        "y": 650,
         "width": 200
       }
     }

@@ -74,8 +74,8 @@ const DrinkMakingStation = ({
   const [stirringDuration, setStirringDuration] = useState(0);
   const [stirringFrame, setStirringFrame] = useState<'left' | 'center' | 'right'>('center');
 
-  // Determine what was made
-  const getDrinkType = (): 'coffee' | 'hot-chocolate' | 'mocha' | null => {
+  // what drink  was made
+    const getDrinkType = (): 'coffee' | 'hot-chocolate' | 'mocha' | null => {
     const hasCoffee = coffeeLevel > 0;
     const hasHotChocolate = hotMilkLevel > 0 && chocolateAdded && stirringDuration >= 3;
     
@@ -112,16 +112,16 @@ const DrinkMakingStation = ({
   const handleReadyToPour = () => {
     console.log("Ready to pour triggered!", { kettleState, cupLocation, hotMilkLevel, kettleTemperature }); // ← Add kettleTemperature
     if (kettleTemperature >= 140 && cupLocation === 'counter' && !overflowed && hotMilkLevel < 100) {
-        console.log("✅ Setting readyToPour to TRUE!");
+        // console.log("Setting readyToPour to TRUE!");
         setReadyToPour(true);
         setKettleState('hot');
-  } else {
-    console.log("❌ Condition failed!"); // ← Add this
+  // } else {
+  //   console.log(" Condition failed!"); 
   }
 };
 
     const handleStartPouring = () => {
-        console.log("Starting pour!");
+        // console.log("Starting pour!");
     if (readyToPour && !overflowed && hotMilkLevel < 100) {
         setIsPouring(true);
         setPouringHotMilk(true);
@@ -370,7 +370,7 @@ useEffect(() => {
   }
 }, [isStirring]);
 
-// Auto-stop stirring at 3 seconds ← ADD THIS
+// Auto-stop stirring at 3 seconds
 useEffect(() => {
   if (stirringDuration >= 3 && isStirring) {
     setIsStirring(false);
@@ -378,7 +378,7 @@ useEffect(() => {
 }, [stirringDuration, isStirring]);
 
 
-  // Stirring animation
+  // Stirring animation (using my three drawings)
   useEffect(() => {
   if (isStirring) {
     const frameSequence: ('left' | 'center' | 'right')[] = ['center', 'left', 'center', 'right'];
@@ -414,14 +414,14 @@ useEffect(() => {
           left: '50%',
           transform: 'translateX(-50%)',
           zIndex: 1000,
-          backgroundColor: 'rgba(255, 0, 0, 0.9)',
+          backgroundColor: 'rgba(190, 54, 54, 0.9)',
           color: 'white',
           padding: '15px 30px',
           borderRadius: '10px',
           fontWeight: 'bold',
           fontSize: '18px',
           textAlign: 'center',
-          boxShadow: '0 4px 12px rgba(255, 0, 0, 0.5)'
+          boxShadow: '0 4px 12px rgba(136, 28, 28, 0.5)'
         }}>
           <p style={{ margin: 0 }}>🔥 FIRE! Click stove to turn off! 🔥</p>
         </div>
@@ -464,7 +464,7 @@ useEffect(() => {
     fontSize: '16px',
     boxShadow: '0 4px 8px rgba(0,0,0,0.3)'
   }}>
-    🍫☕ Making a Mocha! (50/50 mix)
+    🍫☕ Making a Mocha! 
   </div>
 )}
 
@@ -475,8 +475,6 @@ useEffect(() => {
         height: `${layouts.makingScene.container.height}px`,
         margin: '0 auto'
       }}>
-        
-        {/* TOP ROW */}
         
         {/* Cup Stack */}
         <div style={{ 
@@ -489,7 +487,7 @@ useEffect(() => {
             src={assets.objects.cup.stack || assets.objects.cup.empty}
             draggingSrc={assets.objects.cup.empty}
             alt="Cup Stack"
-            dragData={{ type: 'cup' }}
+            dragData={{ type: 'cup'}}
             style={{ 
               width: `${layout.cupStack.width}px`,
               cursor: 'grab',
@@ -543,7 +541,7 @@ useEffect(() => {
                 fontSize: '12px'
               }}
             >
-              STOP ⚠️
+              stop the brew ᕙ(  •̀ ᗜ •́  )ᕗ
             </button>
           )}
 
@@ -557,11 +555,12 @@ useEffect(() => {
           }}>
             <DropZone
               onDrop={(data) => {
-                if (data.type === 'cup' || data.type === 'filled-cup') {
+                console.log("Coffee machine received:", data);
+                if (data.type === 'cup' || data.type === 'filled-cup' || data.type === 'empty-cup') {
                   setCupLocation('machine');
                 }
               }}
-              accepts={['cup', 'filled-cup']}
+              accepts={['cup', 'filled-cup', 'empty-cup']}
               style={{
                 width: `${layout.coffeeMachine.dropZone.width}px`,
                 height: `${layout.coffeeMachine.dropZone.height}px`,
@@ -668,12 +667,12 @@ useEffect(() => {
               marginTop: '5px',
               fontWeight: 'bold'
             }}>
-              👆 Click to refill
+              ya need to refill the beans ! 
             </p>
           )}
         </div>
 
-        {/* Milk Container (top right) */}
+        {/* Milk Container  */}
         {layout.milk && (
           <div style={{ 
             position: 'absolute',
@@ -692,9 +691,9 @@ useEffect(() => {
                 filter: coldMilkAdded ? 'grayscale(100%) opacity(0.5)' : 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))'
               }}
             />
-            <p style={{ fontSize: '11px', color: '#666', marginTop: '5px' }}>
-              {coldMilkAdded ? '✓ Used' : 'For coffee'}
-            </p>
+            {/* <p style={{ fontSize: '11px', color: '#666', marginTop: '5px' }}>
+              {coldMilkAdded ? '  Used' : 'For coffee'}
+            </p> */}
           </div>
         )}
 
@@ -706,8 +705,6 @@ useEffect(() => {
           textAlign: 'center'
         }}>
          
-          
-          {/* Clickable button overlay */}
           <div style={{ position: 'relative', display: 'inline-block' }}>
             <img
               src={
@@ -719,8 +716,8 @@ useEffect(() => {
               style={{
                 width: `${layout.stove.width}px`,
                 display: 'block',
-                filter: stoveState === 'on' ? 'drop-shadow(0 0 10px rgba(255, 100, 0, 0.8))' : 
-                        stoveState === 'fire' ? 'drop-shadow(0 0 20px rgba(255, 0, 0, 1))' : 'none',
+                filter: stoveState === 'on' ? 'drop-shadow(0 0 10px rgba(211, 155, 14, 0.8))' : 
+                        stoveState === 'fire' ? 'drop-shadow(0 0 20px rgba(252, 99, 99, 1))' : 'none',
                 transition: 'all 0.3s',
                 animation: stoveState === 'fire' ? 'shake 0.3s infinite' : 'none',
                 border: stoveState === 'fire' ? '3px solid red' : '3px solid transparent',
@@ -728,8 +725,7 @@ useEffect(() => {
                 pointerEvents: 'none'
               }}
             />
-            
-            {/* Big obvious button */}
+
             <button
               onClick={handleStoveToggle}
               onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
@@ -754,9 +750,9 @@ useEffect(() => {
                 zIndex: 100
               }}
             >
-              {stoveState === 'off' ? '🔘 Turn ON' : 
-               stoveState === 'fire' ? '🚨 PUT OUT FIRE!' : 
-               'Turn OFF'}
+              {stoveState === 'off' ? 'Turn On' : 
+               stoveState === 'fire' ? 'PUT OUT FIRE!' : 
+               'Turn Off'}
             </button>
             
             {/* Kettle Drop Zone on Stove */}
@@ -891,9 +887,9 @@ useEffect(() => {
               }}
             />
             
-            <p style={{ fontSize: '10px', color: '#666', marginTop: '5px' }}>
+            {/* <p style={{ fontSize: '10px', color: '#666', marginTop: '5px' }}>
               {kettleState === 'hot' ? '✓ Ready to pour!' : 'Place on stove'}
-            </p>
+            </p> */}
           </div>
         )}
 
@@ -955,12 +951,12 @@ useEffect(() => {
               filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))'
             }}
           />
-          <p style={{ fontSize: '10px', color: '#666', marginTop: '5px' }}>
+          {/* <p style={{ fontSize: '10px', color: '#666', marginTop: '5px' }}>
             {spoonState === 'full' ? 'To cup' : 'To bowl'}
-          </p>
+          </p> */}
         </div>
 
-        {/* Trash Can - INSIDE the main layout div */}
+        {/* Trash Can */}
   <div style={{
     position: 'absolute',
     left: `${layout.trash.x}px`,
@@ -979,7 +975,7 @@ useEffect(() => {
       }}
       // onDragEnter={() => setTrashHover(true)}
       // onDragLeave={() => setTrashHover(false)}
-      accepts={['cup-to-trash', 'filled-cup']}
+      accepts={['cup-to-trash', 'filled-cup', 'empty-cup', 'cup']}
       style={{
         width: `${layout.trash.width}px`,
         height: `${layout.trash.width}px`,
@@ -1005,13 +1001,13 @@ useEffect(() => {
         }}
       />
     </DropZone>
-    <p style={{ fontSize: '10px', color: '#666', marginTop: '5px' }}>
+    {/* <p style={{ fontSize: '10px', color: '#666', marginTop: '5px' }}>
       Drag cup here to restart
-    </p>
+    </p> */}
   </div>
 
         
-        {/* Cup Drop Zone - standalone, no box */}
+        {/* Cup Drop Zone  */}
         <div style={{
           position: 'absolute',
           left: `${layout.cupDropZone.x}px`,
@@ -1021,8 +1017,8 @@ useEffect(() => {
 
           <DropZone
             onDrop={(data) => {
-                console.log("Coffee machine received:", data);
-              if (data.type === 'cup' || data.type === 'filled-cup') {
+                console.log("Counter received:", data);
+              if (data.type === 'cup' || data.type === 'filled-cup' || data.type === 'empty-cup' ) {
                 setCupLocation('counter');
               }
               if (data.type === 'hot-kettle' && cupLocation === 'counter') {
@@ -1036,7 +1032,7 @@ useEffect(() => {
                 handleAddChocolate();
               }
             }}
-            accepts={['cup', 'filled-cup', 'hot-kettle', 'milk', 'spoon-full']}
+            accepts={['cup', 'filled-cup', 'hot-kettle', 'milk', 'spoon-full', 'empty-cup']}
             style={{
               width: `${layout.cupDropZone.width}px`,
               height: `${layout.cupDropZone.height}px`,
@@ -1046,7 +1042,7 @@ useEffect(() => {
               justifyContent: 'center',
               borderWidth: '3px',
               borderStyle: 'dashed',
-              borderColor: cupLocation === 'counter' ? '#27ae60' : '#95a5a6',
+              borderColor: cupLocation === 'counter' ? '#57906fff' : '#95a5a6',
               borderRadius: '10px',
               backgroundColor: cupLocation === 'counter' ? 'rgba(39, 174, 96, 0.1)' : 'rgba(200, 200, 200, 0.05)',
               transition: 'all 0.3s',
@@ -1115,7 +1111,9 @@ useEffect(() => {
                     })()}
                     // draggingSrc={assets.objects.cup.empty}
                     alt="Cup"
-                    dragData={{ type: 'cup-to-trash' }}
+                    dragData={{ 
+                      type: totalLiquidLevel > 0 || chocolateAdded ? 'filled-cup' : 'empty-cup' 
+                    }}
                     style={{ 
                         width: `${layout.cupOnCounter.width}px`,
                         filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))',
@@ -1125,7 +1123,7 @@ useEffect(() => {
 
 
                     
-                {/* Pouring Hot Milk */}
+                {/* Pouring Hot Milk (from the kettle) */}
                 {(pouringHotMilk || isPouring) && (  // ← Changed this line
                 <img
                     src={assets.objects.kettle.pouring}
@@ -1143,7 +1141,7 @@ useEffect(() => {
                 />
                 )}
 
-                {/* Pouring Cold Milk */}
+                {/* Pouring Cold Milk (from the milk container) */}
                 {pouringColdMilk && (
                   <img
                     src={assets.objects.milk.pouring}
@@ -1151,7 +1149,7 @@ useEffect(() => {
                     style={{
                       position: 'absolute',
                       top: `${layout.coldMilk.pouringAnimation.top}px`,
-                      left: '50%',
+                      left: '20%',
                       transform: 'translateX(-50%)',
                       width: `${layout.coldMilk.pouringAnimation.width}px`,
                       zIndex: 20,
