@@ -15,7 +15,7 @@ export const calculateScore = (
 ): number => {
   let score = 0;
 
-  // 1. DRINK TYPE CORRECTNESS (40 points)
+  // 1. CORRECT DRINK TYPE (40 points)
   const orderedDrink = order.drink;
   let madeDrink: 'coffee' | 'hot-chocolate' | 'mocha' | null = null;
   
@@ -32,100 +32,63 @@ export const calculateScore = (
   if (madeDrink === orderedDrink) {
     score += 40;
   } else {
-    // Wrong drink type = automatic fail
+    // Wrong drink = fail
     return 0;
   }
 
-  // 2. TOPPINGS CORRECTNESS (20 points)
+  // 2. FILLED CORRECTLY (30 points)
+  if (metrics.overflowed) {
+    // Overflow = 0 points for filling
+    score += 0;
+  } else {
+    // Give points based on drink type
+    if (drink.base.includes('coffee') && metrics.coffeeLevel !== undefined) {
+      // Coffee: just needs to be brewed (any level > 0 is good)
+      score += 30;
+    } else if (drink.base.includes('hot-chocolate')) {
+      // Hot chocolate/mocha: needs milk filled
+      if (metrics.milkLevel !== undefined && metrics.milkLevel >= 50) {
+        score += 30; // Good fill level
+      } else if (metrics.milkLevel !== undefined && metrics.milkLevel >= 30) {
+        score += 20; // Okay
+      } else {
+        score += 10; // Not enough
+      }
+    } else {
+      // Default: no overflow = good
+      score += 30;
+    }
+  }
+
+  // 3. CORRECT TOPPINGS (30 points)
   const orderedExtras = [...order.extras].sort();
   const madeExtras = [...drink.extras].sort();
   
+  // Check if toppings match exactly
   if (orderedExtras.length === madeExtras.length) {
-    let correctToppings = 0;
+    let allMatch = true;
     for (let i = 0; i < orderedExtras.length; i++) {
-      if (orderedExtras[i] === madeExtras[i]) {
-        correctToppings++;
+      if (orderedExtras[i] !== madeExtras[i]) {
+        allMatch = false;
+        break;
       }
     }
-    // Proportional score based on correct toppings
-    score += Math.round((correctToppings / Math.max(orderedExtras.length, 1)) * 20);
+    
+    if (allMatch) {
+      score += 30; // Perfect toppings!
+    } else {
+      // Some are correct
+      const correctCount = madeExtras.filter(e => orderedExtras.includes(e)).length;
+      score += Math.round((correctCount / orderedExtras.length) * 30);
+    }
+  } else if (orderedExtras.length === 0 && madeExtras.length === 0) {
+    // No toppings ordered, none added = perfect
+    score += 30;
   } else {
-    // Wrong number of toppings = partial credit
+    // Wrong number of toppings
     const correctCount = madeExtras.filter(e => orderedExtras.includes(e)).length;
-    score += Math.round((correctCount / Math.max(orderedExtras.length, 1)) * 10);
-  }
-
-  // 3. OVERFLOW CHECK (automatic deduction)
-  if (metrics.overflowed) {
-    score -= 30;
-  }
-
-  // 4. DRINK QUALITY METRICS (40 points total)
-  
-  // Coffee Level (10 points) - for coffee and mocha
-  if (drink.base.includes('coffee') && metrics.coffeeLevel !== undefined) {
-    if (metrics.coffeeLevel >= 90 && metrics.coffeeLevel <= 100) {
-      score += 10; // Perfect
-    } else if (metrics.coffeeLevel >= 70) {
-      score += 7; // Good
-    } else if (metrics.coffeeLevel >= 50) {
-      score += 4; // Okay
-    }
-  }
-
-  // Hot Chocolate Temperature (10 points) - for hot chocolate and mocha
-  if (drink.base.includes('hot-chocolate') && metrics.hotChocolateTemp !== undefined) {
-    const temp = metrics.hotChocolateTemp;
-    if (temp >= 160 && temp <= 180) {
-      score += 10; // Perfect temperature
-    } else if (temp >= 140 && temp < 200) {
-      score += 7; // Good
-    } else if (temp >= 120 && temp < 200) {
-      score += 4; // Okay
-    } else if (temp >= 200) {
-      score -= 10; // Too hot! Dangerous
-    }
-  }
-
-  // Milk Level (10 points) - for hot chocolate and mocha
-  if (drink.base.includes('hot-chocolate') && metrics.milkLevel !== undefined) {
-    if (metrics.milkLevel >= 80 && metrics.milkLevel <= 100) {
-      score += 10; // Perfect
-    } else if (metrics.milkLevel >= 60) {
-      score += 7; // Good
-    } else if (metrics.milkLevel >= 40) {
-      score += 4; // Okay
-    }
-  }
-
-  // Stirring Duration (10 points) - for hot chocolate and mocha
-  if (drink.base.includes('hot-chocolate') && metrics.stirringDuration !== undefined) {
-    if (metrics.stirringDuration >= 3) {
-      score += 10; // Perfect - stirred for full 3 seconds
-    } else if (metrics.stirringDuration >= 2) {
-      score += 7; // Good
-    } else if (metrics.stirringDuration >= 1) {
-      score += 4; // Okay
-    }
-  }
-
-  // 5. TOPPING QUALITY (bonus points if toppings ordered)
-  if (order.extras.length > 0 && drink.extras.length > 0) {
-    // Whipped Cream First (5 bonus points)
-    if (order.extras.includes('whipped-cream') && metrics.whippedCreamFirst) {
-      score += 5;
-    }
-
-    // Whipped Cream Duration (5 bonus points) - held for 2 seconds
-    if (order.extras.includes('whipped-cream') && metrics.whippedCreamDuration !== undefined) {
-      if (metrics.whippedCreamDuration >= 2000) {
-        score += 5; // Perfect - held for 2 seconds
-      } else if (metrics.whippedCreamDuration >= 1500) {
-        score += 3; // Good
-      } else if (metrics.whippedCreamDuration >= 1000) {
-        score += 1; // Okay
-      }
-    }
+    const maxCount = Math.max(orderedExtras.length, madeExtras.length);
+    score += Math.round((correctCount / maxCount) * 15);
   }
 
   // Ensure score is between 0 and 100
