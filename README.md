@@ -1,6 +1,6 @@
 # 𖤓 Claire's Café Simulator 𖤓
 
-A fun and interactive café simulation game where you take orders and make delicious drinks for customers! Master the art of coffee-making, hot chocolate brewing, and topping decoration in this cozy browser-based game.
+A fun and interactive café simulation game where you take orders and make delicious drinks for customers, set in a small mountain cabin at the base of a snowy ski slope.  Master the art of coffee-making, hot chocolate brewing, and topping decoration in this cozy browser-based game.
 
 .｡❅*⋆⍋*∞*｡
 
@@ -199,6 +199,6 @@ This project is open source and available under the MIT License.
 ---
 
 
-**Enjoy making drinks! ☕**
+**Enjoy making drinks! **
 
 *Made with ♡ (and lots of coffee)*
