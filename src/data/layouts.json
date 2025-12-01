@@ -34,8 +34,8 @@
   },
   "makingScene": {
     "container": {
-      "width": 1400,
-      "height": 900
+      "width": 1300,
+      "height": 800
     },
     "coffeeMakerScene": {
       "cupStack": {
@@ -129,7 +129,7 @@
   },
   "toppingStation": {
     "container": {
-      "width": 1400,
+      "width": 1300,
       "height": 900
     },
     "cupArea": {

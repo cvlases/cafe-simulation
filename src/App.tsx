@@ -326,7 +326,7 @@ const handleContinueAfterScore = () => {
 
           {/* Back button */}
 <img
-  src={backButtonPressed ? assets.ui.buttons.back.pressed : assets.ui.buttons.back.normal}
+  src={backButtonPressed ? assets.ui.buttons.back.pressed : assets.ui.buttons.back}
   alt="Back to Order"
   onMouseDown={() => setBackButtonPressed(true)}
   onMouseUp={() => {
