@@ -2,8 +2,8 @@ import { useState } from 'react';
 
 interface DropZoneProps {
   onDrop: (data: any) => void;
-  onDragEnter?: (data: any) => void; // ← ADD THIS
-  onDragLeave?: (data: any) => void; // ← ADD THIS
+  onDragEnter?: (data: any) => void; 
+  onDragLeave?: (data: any) => void; 
   children: React.ReactNode;
   style?: React.CSSProperties;
   className?: string;
@@ -17,8 +17,8 @@ interface DropZoneProps {
  */
 const DropZone = ({
   onDrop,
-  onDragEnter, // ← ADD THIS
-  onDragLeave, // ← ADD THIS
+  onDragEnter, 
+  onDragLeave,
   children,
   style = {},
   className = '',
@@ -26,7 +26,7 @@ const DropZone = ({
   accepts = [],
 }: DropZoneProps) => {
   const [isOver, setIsOver] = useState(false);
-  const [currentDragData, setCurrentDragData] = useState<any>(null); // ← ADD THIS to track drag data
+  const [currentDragData, setCurrentDragData] = useState<any>(null); // to track drag data
 
   const handleDragOver = (e: React.DragEvent) => {
   e.preventDefault();

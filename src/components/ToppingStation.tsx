@@ -464,7 +464,7 @@ const handleSprinkleShake = () => {
             )}
 
 
-            {/* Sprinkles shaking overlay - ADD THIS */}
+            {/* Sprinkles shaking overlay  */}
 {sprinklesOverCup && (
   <div style={{
     position: 'absolute',
