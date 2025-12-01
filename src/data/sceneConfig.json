@@ -15,9 +15,9 @@
         "height": 150
       },
       "startButton": {
-        "x": 750,
-        "y": 720,
-        "width": 150,
+        "x": 840,
+        "y": 675,
+        "width": 200,
         "height": 60
       }
     }

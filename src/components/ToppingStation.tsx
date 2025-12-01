@@ -117,7 +117,7 @@ const ToppingStation = ({
   // };
 
   const handleMarshmallowScoop = () => {
-  console.log("🍬 Marshmallow scoop dropped");
+  // console.log(" Marshmallow scoop dropped");
   if (!hasMarshmallows) {
     onAddTopping("marshmallows");
     // setMarshmallowScoopOverCup(false);
@@ -125,7 +125,7 @@ const ToppingStation = ({
 };
 
 const handleSprinkleShake = () => {
-  console.log("✨ Sprinkle shake handler called", { hasSprinkles, sprinklesOverCup, shakeCount });
+  // console.log(" Sprinkle shake handler called", { hasSprinkles, sprinklesOverCup, shakeCount });
   if (!hasSprinkles) {  // ← Simplified
     setShakingSprinkles(true);
     setShakeCount((prev) => {
@@ -141,7 +141,7 @@ const handleSprinkleShake = () => {
     // Add sprinkles after 3 shakes
     if (shakeCount >= 2) {
       setTimeout(() => {
-        console.log("✅ Adding sprinkles!");
+        // console.log("  Adding sprinkles!");
         onAddTopping("sprinkles");
         setSprinklesOverCup(false);
         setShakeCount(0);
@@ -187,14 +187,14 @@ const handleSprinkleShake = () => {
         alt="Whipped Cream"
         dragData={{ type: 'whipped-cream' }}
         onDragStart={() => {
-          console.log("🔵 Started dragging whipped cream"); // DEBUG
+          // console.log("Started dragging whipped cream"); // DEBUG
           currentlyDragging = 'whipped-cream';
           if (!hasWhippedCream && !hasOtherToppings) {
             setWhippingCream(false);
           }
         }}
         onDragEnd={() => {
-          console.log("🔴 Stopped dragging whipped cream"); // DEBUG
+          // console.log(" Stopped dragging whipped cream"); // DEBUG
           currentlyDragging = null;
         }}
         style={{
@@ -247,11 +247,11 @@ const handleSprinkleShake = () => {
       alt="Marshmallow Scoop"
       dragData={{ type: 'marshmallow-scoop' }}
       onDragStart={() => {
-        console.log("🔵 Started dragging marshmallow scoop");
+        // console.log("  Started dragging marshmallow scoop");
         currentlyDragging = 'marshmallow-scoop';
       }}
       onDragEnd={() => {
-        console.log("🔴 Stopped dragging marshmallow scoop");
+        // console.log(" Stopped dragging marshmallow scoop");
         currentlyDragging = null;
       }}
       style={{
@@ -282,11 +282,11 @@ const handleSprinkleShake = () => {
   alt="Sprinkles"
   dragData={{ type: 'sprinkles' }}
   onDragStart={() => {
-    console.log("🔵 Started dragging sprinkles"); // DEBUG
+    // console.log("  Started dragging sprinkles"); // DEBUG
     currentlyDragging = 'sprinkles';
   }}
   onDragEnd={() => {
-    console.log("🔴 Stopped dragging sprinkles"); // DEBUG
+    // console.log(" Stopped dragging sprinkles"); // DEBUG
     currentlyDragging = null;
   }}
   style={{
@@ -361,7 +361,7 @@ const handleSprinkleShake = () => {
 
           <DropZone
   onDrop={(data) => {
-    console.log("💧 DROP EVENT:", data); // DEBUG
+    // console.log("  DROP EVENT:", data); // DEBUG
     if (data.type === 'whipped-cream') {
       console.log("Whipped cream dropped!");
     }
@@ -375,13 +375,13 @@ const handleSprinkleShake = () => {
     }
   }}
   onDragEnter={(_data) => {
-    console.log("⬇️ DRAG ENTER:", currentlyDragging); // DEBUG
+    // console.log("⬇️ DRAG ENTER:", currentlyDragging); // DEBUG
     // Use global state instead of data.type
     if (currentlyDragging === 'whipped-cream') {
       setWhippedCreamOverCup(true);
       if (!hasWhippedCream && !hasOtherToppings) {
         setWhippingCream(true);
-        console.log("✅ Started whipping!");
+        // console.log("  Started whipping!");
       }
     }
     // if (currentlyDragging === 'marshmallow-scoop') {
@@ -392,7 +392,7 @@ const handleSprinkleShake = () => {
     }
   }}
   onDragLeave={() => {
-    console.log("⬆️ DRAG LEAVE"); // DEBUG
+    // console.log("⬆️ DRAG LEAVE"); // DEBUG
     setWhippedCreamOverCup(false);
     // setMarshmallowScoopOverCup(false);
     setSprinklesOverCup(false);
@@ -584,7 +584,7 @@ const handleSprinkleShake = () => {
   />
 </>
 
-{/* Serve Button - Always available */}
+{/* Serve Button  */}
 <div style={{
   position: 'fixed',
   bottom: '40px',
@@ -614,7 +614,7 @@ const handleSprinkleShake = () => {
 
     }}
   >
-    Serve Drink ✓
+    Serve Drink ➺
   </button>
 </div>
     </div>
